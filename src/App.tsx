@@ -24,7 +24,12 @@ import {
   Trash2,
   FileSpreadsheet,
   Check,
-  AlertCircle
+  AlertCircle,
+  Search,
+  Filter,
+  FolderOpen,
+  Copy,
+  Terminal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -70,45 +75,114 @@ const SCREENSHOTS_DATA = [
     id: 'dashboard',
     title: 'Home Dashboard',
     desc: 'The centralized hub for your German study session. Keep tabs on daily goals, current streaks, due review items, and live statistics at a single glance.',
-    badge: 'Centralized',
+    badge: 'Home',
     image: 'assets/preview/Home.png'
   },
   {
-    id: 'vocab',
-    title: 'Vocabulary Manager',
-    desc: 'Fully browse, filter, edit, and curate your personalized dictionary. Organize your words with custom tags and track acquisition rates.',
-    badge: 'Flexible',
-    image: 'assets/preview/vocab-manager.png'
+    id: 'profile',
+    title: 'Personal Profile',
+    desc: 'Track your personal details, highest learning streaks, total XP achievements, mastered items count, and overall progress stats.',
+    badge: 'Profile',
+    image: 'assets/preview/Profile.png'
   },
   {
-    id: 'grammar',
-    title: 'Grammar Practice',
-    desc: 'Bite-sized grammar workouts and structured drills to master case endings (Nominativ, Akkusativ, Dativ, Genitiv) and complex sentence structure.',
-    badge: 'Structured',
-    image: 'assets/preview/Practice.png'
+    id: 'learn-1',
+    title: 'Structured Lessons',
+    desc: 'Navigate topic levels and complete interactive German curriculum tasks designed precisely to step up your vocabulary skills.',
+    badge: 'Learn Path',
+    image: 'assets/preview/Learn-1.png'
+  },
+  {
+    id: 'learn-2',
+    title: 'Vocabulary Card Details',
+    desc: 'Examine vocabulary details with voice pronunciations, English/Bangla meanings, and example sentences. Rate recall difficulty instantly.',
+    badge: 'Study Card',
+    image: 'assets/preview/Learn-2.png'
   },
   {
     id: 'practice',
     title: 'Practice Hub',
-    desc: 'Engage with daily personalized challenges, dynamic sentence builder sessions, and custom-made flashcard sets generated directly from your collection.',
-    badge: 'Interactive',
+    desc: 'Complete focused workouts including noun recall, verb conjugation patterns, and adjective declension drills.',
+    badge: 'Practice',
+    image: 'assets/preview/Practice.png'
+  },
+  {
+    id: 'revision',
+    title: 'Revision System',
+    desc: 'Access your pending spaced repetitions, review confused words, and lock in long-term retention of learned elements.',
+    badge: 'Revision',
     image: 'assets/preview/revision.png'
   },
   {
     id: 'stats',
     title: 'Learning Statistics',
-    desc: 'Beautifully visualized progression charts, weekly activity logs, cumulative XP meters, and breakdown of masteries by CEFR proficiency levels.',
-    badge: 'Insightful',
+    desc: 'Beautifully visualized weekly charts, learning heatmaps, progression metrics, and proficiency benchmarks.',
+    badge: 'Statistics',
     image: 'assets/preview/Stats.png'
   },
   {
     id: 'workspace',
     title: 'Study Workspace',
-    desc: 'Your creative playground. Create study folders, attach contextual notes to challenging words, and save customized lesson materials for offline study.',
-    badge: 'Productive',
+    desc: 'An efficient area to organize custom study folders, attach notes to complex words, and group words together.',
+    badge: 'Workspace',
     image: 'assets/preview/study-workspace.png'
+  },
+  {
+    id: 'learned',
+    title: 'Learned Vocabulary',
+    desc: 'Keep track of all vocabulary you have fully mastered and moved to your completed dictionary archive.',
+    badge: 'Mastery',
+    image: 'assets/preview/Learned.png'
+  },
+  {
+    id: 'vocab',
+    title: 'Vocabulary Manager',
+    desc: 'A comprehensive dictionary browser with robust search, filtering by level, manual addition, batch import, and OCR scan tools.',
+    badge: 'Manager',
+    image: 'assets/preview/vocab-manager.png'
+  },
+  {
+    id: 'backup',
+    title: 'Backup & Restore',
+    desc: 'Seamlessly export full backup files or import CSV/JSON custom word spreadsheets to keep your data portable.',
+    badge: 'Backup',
+    image: 'assets/preview/Backup&restore.png'
   }
 ];
+
+const VOCAB_FORMATS = {
+  Noun: `WORD: der Tisch
+PLURAL: die Tische
+PATTERN: + -e
+EN: table
+BN: own language
+EXAMPLE: Der Tisch ist groß. / own language
+LEVEL: A1/A2...`,
+
+  Verb: `WORD: machen
+PRÄT: machte
+PERFEKT: hat gemacht
+EN: to do / make
+BN: own language
+GRAMMAR: Object + Akk
+EXAMPLE: Ich mache Hausaufgaben. / own language
+LEVEL: A1/A2...`,
+
+  Adjective: `WORD: gut
+COMPARATIVE: besser
+SUPERLATIVE: am besten
+EN: good
+BN: own language
+EXAMPLE: Milch ist gut für Kinder. / own language
+LEVEL: A1/A2...`,
+
+  Others: `WORD: schnell
+EN: fast / quickly
+BN: own language
+EXAMPLE: Er läuft schnell. / own language
+TYPE: Adverb
+LEVEL: A1/A2...`
+};
 
 export default function App() {
   // Navigation active tab
@@ -192,6 +266,10 @@ export default function App() {
 
   // FAQ states
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+
+  // Lightbox and Copy states
+  const [lightboxImg, setLightboxImg] = useState<string | null>(null);
+  const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
 
   // Watch level change to load appropriate list
   useEffect(() => {
@@ -335,6 +413,14 @@ export default function App() {
     v.word.toLowerCase().includes(vocabSearch.toLowerCase()) || 
     v.english.toLowerCase().includes(vocabSearch.toLowerCase())
   );
+
+  const handleCopyFormat = (text: string, formatName: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedFormat(formatName);
+    setTimeout(() => {
+      setCopiedFormat(null);
+    }, 2000);
+  };
 
   const activeScreenshot = SCREENSHOTS_DATA[currentScreenIdx];
 
@@ -659,356 +745,213 @@ export default function App() {
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Explore SprachX Modules</span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight font-display text-white">
-            Everything you need for masterclass German.
+            Everything you need for masterclass German study.
           </h2>
           <p className="text-base text-slate-400 leading-relaxed font-light">
-            Each feature is designed based on the actual components in the Android application. Experience fluid and dedicated workspaces built specifically for language acquisition.
+            Each feature represents the verified layout and capabilities of the real application. Experience structured workspaces built specifically for effective language study.
           </p>
         </div>
 
-        {/* Dynamic Interactive Features Showcase Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 10 Real App Feature Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          {/* Feature 1: Vocabulary Manager */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col justify-between group">
+          {/* Feature 1: Smart Dashboard */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
-                <BookOpen className="w-5 h-5" />
-              </div>
-              <h3 className="text-xl font-bold text-white font-display">Vocabulary Manager</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Browse, edit, and curate your personal vocabulary base. View, modify, or insert contextual metadata to master vocabulary efficiently.
-              </p>
-
-              {/* Micro-Interactive Widget inside Card: Add a quick word */}
-              <div className="bg-white/[0.02] border border-white/5 rounded-xl p-3 space-y-2 text-xs">
-                <span className="text-[9px] uppercase font-bold text-slate-500 block">Simulate Adding Word</span>
-                <form onSubmit={handleAddCustomWord} className="space-y-2">
-                  <div className="grid grid-cols-3 gap-1">
-                    <select 
-                      value={newArticle} 
-                      onChange={(e) => setNewArticle(e.target.value as any)}
-                      className="bg-slate-900 border border-white/10 rounded px-1.5 py-1 text-[10px] text-slate-300 focus:outline-none"
-                    >
-                      <option value="">-</option>
-                      <option value="der">der</option>
-                      <option value="die">die</option>
-                      <option value="das">das</option>
-                    </select>
-                    <input 
-                      type="text" 
-                      placeholder="e.g. Zug" 
-                      value={newWord}
-                      onChange={(e) => setNewWord(e.target.value)}
-                      className="bg-slate-900 border border-white/10 rounded px-2 py-1 text-[10px] text-slate-300 col-span-2 focus:outline-none"
-                    />
-                  </div>
-                  <input 
-                    type="text" 
-                    placeholder="Translation (e.g. train)" 
-                    value={newEnglish}
-                    onChange={(e) => setNewEnglish(e.target.value)}
-                    className="w-full bg-slate-900 border border-white/10 rounded px-2 py-1 text-[10px] text-slate-300 focus:outline-none"
-                  />
-                  <button 
-                    type="submit" 
-                    className="w-full py-1 bg-[#F5A623] hover:bg-amber-500 text-black font-bold rounded text-[9px] uppercase tracking-wider"
-                  >
-                    Add Word to list
-                  </button>
-                </form>
-              </div>
-
-            </div>
-            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-              <span>{userVocabulary.length} Words in list</span>
-              <span className="text-[#F5A623]">Dynamic Workspace</span>
-            </div>
-          </div>
-
-          {/* Feature 2: Grammar & Sentence Training */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col justify-between group">
-            <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
-                <Layers className="w-5 h-5" />
-              </div>
-              <h3 className="text-xl font-bold text-white font-display">Grammar & Sentence Training</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                Practice complex German grammar cases like Dativ, Akkusativ, and Genitiv with structured exercises. Master relative clause word order and adjective endings effortlessly.
-              </p>
-
-              {/* Sample structured card block */}
-              <div className="bg-white/[0.02] border border-white/5 rounded-xl p-3.5 space-y-2 text-xs">
-                <span className="text-[9px] uppercase font-bold text-slate-500 block">Satzbau (Sentence Structure)</span>
-                <p className="italic text-slate-300 font-serif">"Weil ich Deutsch lerne, bin ich froh."</p>
-                <div className="flex flex-wrap gap-1">
-                  <span className="bg-white/5 px-2 py-0.5 rounded text-[9px]">Weil (subordinating conjunction)</span>
-                  <span className="bg-white/5 px-2 py-0.5 rounded text-[9px]">Verb at end (lerne)</span>
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <Grid className="w-5 h-5" />
                 </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 01</span>
               </div>
-
+              <h3 className="text-xl font-bold text-white font-display">Smart Dashboard</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Your centralized command center. View active study progress, navigate CEFR curriculum bases, and inspect daily review slots at a single glance.
+              </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-              <span>Verb Conjugations</span>
-              <span className="text-[#F5A623]">Sentence Builder</span>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Home Hub</span>
+              <span className="text-[#F5A623]">Active</span>
             </div>
           </div>
 
-          {/* Feature 3: Practice Hub */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col justify-between group">
+          {/* Feature 2: Personal Progress */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
-                <Activity className="w-5 h-5" />
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <Smartphone className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 02</span>
+              </div>
+              <h3 className="text-xl font-bold text-white font-display">Personal Progress</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Stay updated on your accomplishments. Track your total milestones and customize profiles to keep up-to-date with your overall studying rhythm.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Profile Hub</span>
+              <span className="text-[#F5A623]">Milestones</span>
+            </div>
+          </div>
+
+          {/* Feature 3: Vocabulary Learning */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 03</span>
+              </div>
+              <h3 className="text-xl font-bold text-white font-display">Vocabulary Learning</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Absorb vocabularies with card layouts detailing pronunciations, translations, example sentences, and responsive response quality levels.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Card Modules</span>
+              <span className="text-[#F5A623]">High Fidelity</span>
+            </div>
+          </div>
+
+          {/* Feature 4: Practice Hub */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 04</span>
               </div>
               <h3 className="text-xl font-bold text-white font-display">Practice Hub</h3>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Step into specialized practice modules. Review challenging cases, finish customized vocabulary sessions, and reinforce previously mistaken words in high-fidelity sessions.
+                Test your skills with interactive exercises. Review genders, decline adjectives, conjugate verbs, and sharpen translation accuracies instantly.
               </p>
-
-              {/* Simulated daily activities */}
-              <div className="space-y-1.5 text-xs">
-                <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-2 rounded-lg">
-                  <span className="font-semibold text-slate-300">Daily Flashcards</span>
-                  <span className="text-emerald-400 font-bold text-[10px]">Complete</span>
-                </div>
-                <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-2 rounded-lg">
-                  <span className="font-semibold text-slate-300">German Gender Drills</span>
-                  <span className="text-amber-400 font-bold text-[10px]">In progress</span>
-                </div>
-              </div>
-
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-              <span>Personalized challenges</span>
-              <span className="text-[#F5A623]">Daily Workouts</span>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Drill Workouts</span>
+              <span className="text-[#F5A623]">Interactive</span>
             </div>
           </div>
 
-          {/* Feature 4: Smart Reviews */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col justify-between group">
+          {/* Feature 5: Revision System */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
-                <RefreshCw className="w-5 h-5" />
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <RefreshCw className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 05</span>
               </div>
-              <h3 className="text-xl font-bold text-white font-display">Smart Reviews</h3>
+              <h3 className="text-xl font-bold text-white font-display">Revision System</h3>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Uses highly calibrated Spaced Repetition algorithms (Anki-style card cycles) to ensure you review words right before your brain forgets them. Perfect retention.
+                Smart spacing ensures vocabulary is reviewed right on time. Monitor pending tasks and isolate challenging elements to lock in long-term masteries.
               </p>
-
-              {/* Progress visualizer */}
-              <div className="bg-white/[0.02] border border-white/5 p-3 rounded-xl flex items-center justify-between text-xs">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] text-slate-500 uppercase block">Next review cycle</span>
-                  <span className="font-bold text-slate-300">4 days from now</span>
-                </div>
-                <div className="text-right text-[10px] font-bold text-[#F5A623]">Interval (Good)</div>
-              </div>
-
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-              <span>Retention rate: 94%</span>
-              <span className="text-[#F5A623]">Spaced Repetition</span>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Spacing Queue</span>
+              <span className="text-[#F5A623]">Calibrated</span>
             </div>
           </div>
 
-          {/* Feature 5: Progress Tracking */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col justify-between group">
+          {/* Feature 6: Learning Statistics */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
-                <SmartphoneNfc className="w-5 h-5" />
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <SmartphoneNfc className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 06</span>
               </div>
-              <h3 className="text-xl font-bold text-white font-display">Progress Tracking</h3>
+              <h3 className="text-xl font-bold text-white font-display">Learning Statistics</h3>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Track cumulative Experience Points (XP), maintain streaks with custom reminders, and review interactive statistics charting vocabulary size and CEFR Level masteries.
+                A visual journal detailing your performance. Analyze streaks and progression parameters to review exactly how your knowledge scales.
               </p>
-
-              <div className="bg-white/[0.02] border border-white/5 p-2.5 rounded-lg text-xs space-y-1">
-                <div className="flex justify-between text-[9px] text-slate-500">
-                  <span>Level Mastery Tracker</span>
-                  <span>74% Mastered</span>
-                </div>
-                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                  <div className="bg-[#F5A623] h-full" style={{ width: '74%' }}></div>
-                </div>
-              </div>
-
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-              <span>XP Achievements</span>
-              <span className="text-[#F5A623]">Interactive Stats</span>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Heatmap Metrics</span>
+              <span className="text-[#F5A623]">Analytical</span>
             </div>
           </div>
 
-          {/* Feature 6: Study Workspace */}
-          <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.04] transition-all duration-300 flex flex-col justify-between group">
+          {/* Feature 7: Study Workspace */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
             <div className="space-y-4">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
-                <FileText className="w-5 h-5" />
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <FileText className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 07</span>
               </div>
               <h3 className="text-xl font-bold text-white font-display">Study Workspace</h3>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Keep complex learning folders and personal notes under structured lists. Save custom example sentences and grammatical reminders to review at any point of time.
+                Stay organized and clutter-free. Bundle words into folders, log contextual grammar tips, and catalog your study materials neatly.
               </p>
-
-              <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg text-xs italic text-slate-400 font-serif">
-                "Note: Dativ is used after prepositions like mit, nach, bei, seit, von, zu..."
-              </div>
-
             </div>
-            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-xs text-slate-500 font-bold uppercase tracking-wider">
-              <span>Folder organization</span>
-              <span className="text-[#F5A623]">Custom Notes</span>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Workspace Directory</span>
+              <span className="text-[#F5A623]">Organized</span>
             </div>
           </div>
 
-        </div>
-
-        {/* ADVANCED MODULES BLOCK */}
-        <div className="mt-16 text-center max-w-2xl mx-auto mb-10">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Advanced Utility Modules</span>
-          <h3 className="text-2xl md:text-3xl font-bold font-display mt-2 text-white">Full data freedom & modern helpers</h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
-          {/* Feature 7: Data Import & Export */}
-          <div className="bg-white/[0.01] border border-white/5 rounded-xl p-5 hover:border-[#F5A623]/25 transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2.5 text-[#F5A623]">
-                <Database className="w-4 h-4" />
-                <h4 className="font-bold text-sm">Data Import & Export</h4>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Import and export your list seamlessly via custom JSON or CSV files. Take complete ownership of your data with offline backup and restoration files.
-              </p>
-            </div>
-            
-            {/* Simulation trigger */}
-            <div className="pt-4 mt-4 border-t border-white/5 space-y-2">
-              <button 
-                onClick={handleDataImport}
-                disabled={importStatus === 'importing'}
-                className="w-full py-1.5 bg-slate-900 border border-white/10 hover:border-[#F5A623]/40 text-white hover:text-[#F5A623] text-[10px] font-bold rounded flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <FileSpreadsheet className="w-3 h-3" />
-                {importStatus === 'importing' ? 'Importing CSV...' : 'Simulate CSV Import'}
-              </button>
-              {importStatus === 'success' && (
-                <p className="text-[10px] text-emerald-400 text-center animate-pulse font-mono">
-                  ✓ Imported {importCount} cards successfully!
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Feature 8: AI Generation */}
-          <div className="bg-white/[0.01] border border-white/5 rounded-xl p-5 hover:border-[#F5A623]/25 transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2.5 text-[#F5A623]">
-                <Sparkles className="w-4 h-4" />
-                <h4 className="font-bold text-sm">AI Generation</h4>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Stuck on what vocabulary lists to learn? Generate beautiful German vocabulary and contextual learning examples customized directly for your topic inside the workspace.
-              </p>
-            </div>
-
-            {/* AI Generator Simulator */}
-            <div className="pt-4 mt-4 border-t border-white/5 space-y-2 text-xs">
-              <div className="flex gap-1.5">
-                <input 
-                  type="text" 
-                  value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
-                  className="bg-slate-900 border border-white/10 rounded px-1.5 py-1 text-[9px] text-slate-300 w-full focus:outline-none"
-                  placeholder="Topic: e.g. Restaurant"
-                />
-                <button 
-                  onClick={handleAiGeneration}
-                  disabled={aiGenerating}
-                  className="px-2 py-1 bg-[#F5A623] text-black font-bold rounded text-[9px] cursor-pointer"
-                >
-                  {aiGenerating ? '...' : 'Gen'}
-                </button>
-              </div>
-
-              {aiGeneratedList.length > 0 && (
-                <div className="bg-slate-900 border border-white/10 rounded p-1.5 space-y-1.5 max-h-[80px] overflow-y-auto">
-                  {aiGeneratedList.map((item, idx) => (
-                    <div key={`ai-gen-${idx}`} className="flex justify-between items-center text-[9px] border-b border-white/5 pb-1">
-                      <div>
-                        <span className="font-bold text-[#F5A623]">{item.word}</span>
-                        <span className="text-slate-400 text-[8px] block">{item.english}</span>
-                      </div>
-                      <button 
-                        onClick={() => addGeneratedToCollection(item)}
-                        className="p-0.5 bg-emerald-500/20 text-emerald-400 rounded hover:bg-emerald-500 hover:text-black font-bold"
-                        title="Add to active database"
-                      >
-                        <Plus className="w-2.5 h-2.5" />
-                      </button>
-                    </div>
-                  ))}
+          {/* Feature 8: Learned Vocabulary */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <CheckCircle className="w-5 h-5" />
                 </div>
-              )}
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 08</span>
+              </div>
+              <h3 className="text-xl font-bold text-white font-display">Learned Vocabulary</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                A dedicated space for fully memorized terms. Filter collections and reference items that you have completely incorporated into your active vocabulary.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Mastery Archive</span>
+              <span className="text-[#F5A623]">Locked-In</span>
             </div>
           </div>
 
-          {/* Feature 9: Batch Processing */}
-          <div className="bg-white/[0.01] border border-white/5 rounded-xl p-5 hover:border-[#F5A623]/25 transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2.5 text-[#F5A623]">
-                <Grid className="w-4 h-4" />
-                <h4 className="font-bold text-sm">Batch Processing</h4>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Avoid tedious manual adjustments. Perform mass actions on your dictionary, assign multiple flags or tags, and organize your files with unified system processes.
-              </p>
-            </div>
-            
-            <div className="pt-4 mt-4 border-t border-white/5 flex gap-1.5">
-              <span className="text-[10px] px-2 py-0.5 bg-white/5 rounded text-slate-400">Bulk edit tags</span>
-              <span className="text-[10px] px-2 py-0.5 bg-white/5 rounded text-slate-400">Mass export list</span>
-            </div>
-          </div>
-
-          {/* Feature 10: OCR Import */}
-          <div className="bg-white/[0.01] border border-white/5 rounded-xl p-5 hover:border-[#F5A623]/25 transition-all flex flex-col justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2.5 text-[#F5A623]">
-                <Camera className="w-4 h-4" />
-                <h4 className="font-bold text-sm">OCR Import</h4>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Scan German text or lists from physical textbooks and images. SprachX will automatically extract the German vocabulary and construct vocabulary items.
-              </p>
-            </div>
-
-            {/* Simulated OCR Scanner */}
-            <div className="pt-4 mt-4 border-t border-white/5 space-y-1.5 text-xs">
-              <button 
-                onClick={handleOcrScan}
-                disabled={ocrStatus === 'scanning'}
-                className="w-full py-1 bg-white/5 hover:bg-white/10 text-white rounded font-bold text-[10px] flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <Camera className="w-3.5 h-3.5 text-[#F5A623]" />
-                {ocrStatus === 'scanning' ? 'Processing text...' : 'Simulate Scanning Text'}
-              </button>
-
-              {scannedWord && (
-                <div className="bg-slate-900 border border-emerald-500/20 rounded p-1.5 flex justify-between items-center">
-                  <div>
-                    <span className="text-[8px] uppercase text-emerald-400 font-bold font-mono">Scanned word found</span>
-                    <span className="block font-bold text-slate-100 text-[10px]">{scannedWord.word}</span>
-                  </div>
-                  <button 
-                    onClick={addOcrToCollection}
-                    className="px-2 py-1 bg-emerald-500 text-black font-bold text-[9px] rounded"
-                  >
-                    Save
-                  </button>
+          {/* Feature 9: Vocabulary Manager */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <Database className="w-5 h-5" />
                 </div>
-              )}
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 09</span>
+              </div>
+              <h3 className="text-xl font-bold text-white font-display">Vocabulary Manager</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                The core engine to catalog your dictionary files. Search and filter item list groups, trigger scanning parameters, and generate structured word definitions.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Verified Layout</span>
+              <span className="text-[#F5A623]">Database</span>
+            </div>
+          </div>
+
+          {/* Feature 10: Backup & Restore */}
+          <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 hover:border-[#F5A623]/30 hover:bg-white/[0.03] transition-all duration-300 flex flex-col justify-between group">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-[#F5A623] group-hover:scale-110 transition-transform">
+                  <RefreshCw className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] uppercase font-bold text-slate-500 font-mono">Module 10</span>
+              </div>
+              <h3 className="text-xl font-bold text-white font-display">Backup & Restore</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Own your hard-earned studying collection. Complete exports to standard file architectures or load backups safely.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center text-[10px] text-slate-500 font-bold uppercase tracking-wider">
+              <span>Backup utility</span>
+              <span className="text-[#F5A623]">Database Portability</span>
             </div>
           </div>
 
@@ -1224,161 +1167,405 @@ export default function App() {
 
       </section>
 
-      {/* REAL APPLICATION SHOWCASE SECTION */}
-      <section id="showcases-section" className="w-full max-w-7xl mx-auto px-6 py-20 md:px-12 border-b border-white/5 space-y-32">
+      {/* CORE DATABASE & VOCABULARY MANAGER HUB (Showcases replaced) */}
+      <section id="showcases-section" className="w-full max-w-7xl mx-auto px-6 py-20 md:px-12 border-b border-white/5 space-y-20">
         
-        {/* Showcase 1: Structured Learning Curriculum (Learn-1.png and Learn-2.png) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 space-y-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">CEFR Curriculum Progression</span>
-            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
-              Structured Learning Paths
-            </h2>
-            <p className="text-base text-slate-400 leading-relaxed font-light">
-              Advance your language capability step-by-step. SprachX provides a comprehensively structured curriculum from beginner A1 all the way to advanced C1 proficiency, complete with clear lesson progressions, interactive case drills, and target goals.
-            </p>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Topic-specific worksheets that teach vocabulary in context.</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Gradual difficulty curves aligned with European CEFR standards.</span>
-              </div>
-            </div>
-          </div>
-          <div className="lg:col-span-7 flex flex-col sm:flex-row justify-center items-center gap-8 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
-            {/* Learn-1 Mockup */}
-            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
-              <img 
-                src="assets/preview/Learn-1.png" 
-                className="w-full h-full object-cover rounded-[24px]" 
-                alt="SprachX Learn Lesson Map" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            {/* Learn-2 Mockup */}
-            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
-              <img 
-                src="assets/preview/Learn-2.png" 
-                className="w-full h-full object-cover rounded-[24px]" 
-                alt="SprachX Lesson Exercise" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          </div>
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Database Curation Engine</span>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight font-display text-white">
+            Vocabulary Manager Hub
+          </h2>
+          <p className="text-base text-slate-400 leading-relaxed font-light">
+            Maintain absolute oversight over your customized dictionary database. Explore, filter, curate, and scale your personal study folders with robust AI and import helpers.
+          </p>
         </div>
 
-        {/* Showcase 2: Study Workspace (study-workspace.png) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 flex justify-center order-2 lg:order-1 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
-            {/* Study Workspace Mockup */}
-            <div className="relative w-[240px] h-[470px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
-              <img 
-                src="assets/preview/study-workspace.png" 
-                className="w-full h-full object-cover rounded-[24px]" 
-                alt="SprachX Study Workspace" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          </div>
-          <div className="lg:col-span-5 space-y-6 order-1 lg:order-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Productive Playgrounds</span>
-            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
-              Study Workspace
-            </h2>
-            <p className="text-base text-slate-400 leading-relaxed font-light">
-              Stay organized and focused. The Study Workspace is your digital repository where you can create custom vocabulary folders, bundle words together by thematic groupings (e.g. Travel, Business, Academics), and log personalized grammar notes.
-            </p>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Custom folder compilation for targeted study.</span>
+        {/* Dual Grid Layout: Capabilities & Documentation */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* Left Column: Capabilities & Process */}
+          <div className="lg:col-span-5 space-y-8">
+            
+            {/* Capabilities List */}
+            <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-6 md:p-8 space-y-6">
+              <h3 className="text-xl font-bold text-white font-display flex items-center gap-2">
+                <Database className="w-5 h-5 text-[#F5A623]" />
+                Manager Capabilities
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                curate and grow your personalized database utilizing a full suite of curation utilities:
+              </p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-medium text-slate-300">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>Browse Vocabulary</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>Search Vocabulary</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>Filter by CEFR Level</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>Organize Vocabulary</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>Import Vocabulary</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>AI Generation</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>Batch Import</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
+                  <span>OCR Import</span>
+                </div>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Add syntax tips, notes, and references to cards.</span>
+            </div>
+
+            {/* Vocabulary Add Process */}
+            <div className="bg-white/[0.01] border border-[#F5A623]/10 rounded-2xl p-6 md:p-8 space-y-4">
+              <span className="text-[10px] uppercase bg-[#F5A623]/10 border border-[#F5A623]/20 px-2 py-0.5 rounded text-[#F5A623] font-bold font-mono tracking-wide inline-block">
+                AI Generation Integration
+              </span>
+              <h3 className="text-xl font-bold text-white font-display">
+                Vocabulary Add Process
+              </h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Generate high-fidelity vocabulary using ChatGPT, Gemini, Grok or any other AI model. Simply instruct your preferred AI to structure output following our system configurations, copy the template block, and import into SprachX.
+              </p>
+              <div className="p-3 bg-white/[0.02] border border-white/5 rounded-lg text-xs font-semibold text-slate-300">
+                • Prompt apply ChatGPT, Gemini, Grok etc. .
               </div>
             </div>
+
           </div>
+
+          {/* Right Column: Copyable Format Standards */}
+          <div className="lg:col-span-7 space-y-6">
+            
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-bold text-white font-display flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-[#F5A623]" />
+                Supported Vocabulary Formats
+              </h3>
+              <span className="text-xs text-slate-500 font-mono">Click copy icon to use template</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Noun Format Card */}
+              <div className="bg-[#080B11] border border-white/5 rounded-xl p-4 flex flex-col justify-between space-y-3 relative group/card hover:border-white/10 transition-colors">
+                <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                  <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">Noun Template</span>
+                  <button 
+                    onClick={() => handleCopyFormat(VOCAB_FORMATS.Noun, 'Noun')}
+                    className="p-1.5 hover:bg-white/5 rounded text-slate-400 hover:text-[#F5A623] transition-all flex items-center gap-1 text-[10px]"
+                    title="Copy Noun Template"
+                  >
+                    {copiedFormat === 'Noun' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400 font-mono">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="font-mono">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <pre className="text-[10px] text-slate-300 font-mono bg-[#05070A] p-3 rounded-lg overflow-x-auto leading-relaxed whitespace-pre">
+                  {VOCAB_FORMATS.Noun}
+                </pre>
+              </div>
+
+              {/* Verb Format Card */}
+              <div className="bg-[#080B11] border border-white/5 rounded-xl p-4 flex flex-col justify-between space-y-3 relative group/card hover:border-white/10 transition-colors">
+                <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                  <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">Verb Template</span>
+                  <button 
+                    onClick={() => handleCopyFormat(VOCAB_FORMATS.Verb, 'Verb')}
+                    className="p-1.5 hover:bg-white/5 rounded text-slate-400 hover:text-[#F5A623] transition-all flex items-center gap-1 text-[10px]"
+                    title="Copy Verb Template"
+                  >
+                    {copiedFormat === 'Verb' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400 font-mono">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="font-mono">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <pre className="text-[10px] text-slate-300 font-mono bg-[#05070A] p-3 rounded-lg overflow-x-auto leading-relaxed whitespace-pre">
+                  {VOCAB_FORMATS.Verb}
+                </pre>
+              </div>
+
+              {/* Adjective Format Card */}
+              <div className="bg-[#080B11] border border-white/5 rounded-xl p-4 flex flex-col justify-between space-y-3 relative group/card hover:border-white/10 transition-colors">
+                <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                  <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">Adjective Template</span>
+                  <button 
+                    onClick={() => handleCopyFormat(VOCAB_FORMATS.Adjective, 'Adjective')}
+                    className="p-1.5 hover:bg-white/5 rounded text-slate-400 hover:text-[#F5A623] transition-all flex items-center gap-1 text-[10px]"
+                    title="Copy Adjective Template"
+                  >
+                    {copiedFormat === 'Adjective' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400 font-mono">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="font-mono">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <pre className="text-[10px] text-slate-300 font-mono bg-[#05070A] p-3 rounded-lg overflow-x-auto leading-relaxed whitespace-pre">
+                  {VOCAB_FORMATS.Adjective}
+                </pre>
+              </div>
+
+              {/* Others Format Card */}
+              <div className="bg-[#080B11] border border-white/5 rounded-xl p-4 flex flex-col justify-between space-y-3 relative group/card hover:border-white/10 transition-colors">
+                <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                  <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">Others Template</span>
+                  <button 
+                    onClick={() => handleCopyFormat(VOCAB_FORMATS.Others, 'Others')}
+                    className="p-1.5 hover:bg-white/5 rounded text-slate-400 hover:text-[#F5A623] transition-all flex items-center gap-1 text-[10px]"
+                    title="Copy Others Template"
+                  >
+                    {copiedFormat === 'Others' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-emerald-400 font-mono">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="font-mono">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <pre className="text-[10px] text-slate-300 font-mono bg-[#05070A] p-3 rounded-lg overflow-x-auto leading-relaxed whitespace-pre">
+                  {VOCAB_FORMATS.Others}
+                </pre>
+              </div>
+
+            </div>
+
+          </div>
+
         </div>
 
-        {/* Showcase 3: Vocabulary Manager & Mastered Words (vocab-manager.png and Learned.png) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 space-y-6">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Database Curation</span>
-            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
-              Vocabulary Manager
-            </h2>
-            <p className="text-base text-slate-400 leading-relaxed font-light">
-              Maintain absolute oversight over your customized dictionary. Use the robust Vocabulary Manager to view active words, quickly add or modify entries, filter by CEFR level or category, and isolate mastered elements inside a dedicated Learned section.
+        {/* Interactive Playgrounds Sandbox Panel */}
+        <div className="bg-white/[0.01] border border-white/5 rounded-3xl p-6 md:p-8 space-y-8 mt-12">
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-6">
+            <div className="space-y-1">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Simulation Panel</span>
+              <h3 className="text-xl font-bold text-white font-display">Interactive Workspace Simulators</h3>
+            </div>
+            <p className="text-xs text-slate-500 max-w-sm">
+              Test how actual database inputs, AI generators, OCR models, and imports compute inside SprachX.
             </p>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Mastery dictionary isolating completely memorized terms.</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Direct search and responsive edit controls inside lists.</span>
-              </div>
-            </div>
           </div>
-          <div className="lg:col-span-7 flex flex-col sm:flex-row justify-center items-center gap-8 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
-            {/* Vocab Manager Mockup */}
-            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
-              <img 
-                src="assets/preview/vocab-manager.png" 
-                className="w-full h-full object-cover rounded-[24px]" 
-                alt="SprachX Vocabulary Manager" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            {/* Learned Mockup */}
-            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
-              <img 
-                src="assets/preview/Learned.png" 
-                className="w-full h-full object-cover rounded-[24px]" 
-                alt="SprachX Learned Section" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* Showcase 4: Reliable Data Portability (Backup&restore.png) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 flex justify-center order-2 lg:order-1 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
-            {/* Backup & Restore Mockup */}
-            <div className="relative w-[240px] h-[470px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
-              <img 
-                src="assets/preview/Backup&restore.png" 
-                className="w-full h-full object-cover rounded-[24px]" 
-                alt="SprachX Backup and Restore Utility" 
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          </div>
-          <div className="lg:col-span-5 space-y-6 order-1 lg:order-2">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Data Ownership</span>
-            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
-              Backup & Restore
-            </h2>
-            <p className="text-base text-slate-400 leading-relaxed font-light">
-              Your hard-earned study records remain secure under your direct command. SprachX includes an integrated local backup and restoration utility that allows you to easily export your databases to standard CSV or JSON files or import backup collections seamlessly.
-            </p>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Instant import of vocabulary collections in open structures.</span>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            {/* Simulator 1: Add Custom Word */}
+            <div className="bg-slate-950/80 border border-white/5 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-slate-200">
+                  <div className="w-7 h-7 rounded-lg bg-[#F5A623]/10 flex items-center justify-center text-[#F5A623]">
+                    <Plus className="w-4 h-4" />
+                  </div>
+                  <h4 className="font-bold text-xs uppercase tracking-wider font-mono">1. Manual Word Addition</h4>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Directly input individual dictionary items to save inside active curriculum study slots.
+                </p>
+                <form onSubmit={handleAddCustomWord} className="space-y-2 pt-2">
+                  <div className="grid grid-cols-3 gap-1">
+                    <select 
+                      value={newArticle} 
+                      onChange={(e) => setNewArticle(e.target.value as any)}
+                      className="bg-slate-900 border border-white/10 rounded px-1 text-[10px] text-slate-300 focus:outline-none"
+                    >
+                      <option value="">-</option>
+                      <option value="der">der</option>
+                      <option value="die">die</option>
+                      <option value="das">das</option>
+                    </select>
+                    <input 
+                      type="text" 
+                      placeholder="e.g. Zug" 
+                      value={newWord}
+                      onChange={(e) => setNewWord(e.target.value)}
+                      className="bg-slate-900 border border-white/10 rounded px-2 py-1 text-[10px] text-slate-300 col-span-2 focus:outline-none"
+                    />
+                  </div>
+                  <input 
+                    type="text" 
+                    placeholder="Translation (e.g. train)" 
+                    value={newEnglish}
+                    onChange={(e) => setNewEnglish(e.target.value)}
+                    className="w-full bg-slate-900 border border-white/10 rounded px-2 py-1 text-[10px] text-slate-300 focus:outline-none"
+                  />
+                  <button 
+                    type="submit" 
+                    className="w-full py-1.5 bg-[#F5A623] hover:bg-amber-500 text-black font-bold rounded text-[10px] uppercase tracking-wider cursor-pointer"
+                  >
+                    Add to active list
+                  </button>
+                </form>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
-                <span className="text-slate-300 text-sm font-medium">Full database backup exports to easily switch devices.</span>
+            </div>
+
+            {/* Simulator 2: AI Word Generator */}
+            <div className="bg-slate-950/80 border border-white/5 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-slate-200">
+                  <div className="w-7 h-7 rounded-lg bg-[#F5A623]/10 flex items-center justify-center text-[#F5A623]">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <h4 className="font-bold text-xs uppercase tracking-wider font-mono">2. AI Word Generator</h4>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Enter a theme prefix to trigger automated, structured German word definitions.
+                </p>
+                <div className="space-y-2 pt-2">
+                  <div className="flex gap-1.5">
+                    <input 
+                      type="text" 
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      className="bg-slate-900 border border-white/10 rounded px-2 py-1.5 text-[10px] text-slate-300 w-full focus:outline-none"
+                      placeholder="Topic: e.g. Restaurant"
+                    />
+                    <button 
+                      onClick={handleAiGeneration}
+                      disabled={aiGenerating}
+                      className="px-3 bg-[#F5A623] text-black font-bold rounded text-[10px] cursor-pointer whitespace-nowrap hover:bg-amber-500"
+                    >
+                      {aiGenerating ? '...' : 'Generate'}
+                    </button>
+                  </div>
+
+                  {aiGeneratedList.length > 0 && (
+                    <div className="bg-slate-900 border border-white/10 rounded p-1.5 space-y-1.5 max-h-[85px] overflow-y-auto">
+                      {aiGeneratedList.map((item, idx) => (
+                        <div key={`ai-gen-${idx}`} className="flex justify-between items-center text-[9px] border-b border-white/5 pb-1 last:border-0 last:pb-0">
+                          <div>
+                            <span className="font-bold text-[#F5A623]">{item.word}</span>
+                            <span className="text-slate-400 text-[8px] block">{item.english}</span>
+                          </div>
+                          <button 
+                            onClick={() => addGeneratedToCollection(item)}
+                            className="p-1 bg-emerald-500/20 text-emerald-400 rounded hover:bg-emerald-500 hover:text-black font-bold"
+                          >
+                            <Plus className="w-2.5 h-2.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+
+            {/* Simulator 3: OCR scanner */}
+            <div className="bg-slate-950/80 border border-white/5 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-slate-200">
+                  <div className="w-7 h-7 rounded-lg bg-[#F5A623]/10 flex items-center justify-center text-[#F5A623]">
+                    <Camera className="w-4 h-4" />
+                  </div>
+                  <h4 className="font-bold text-xs uppercase tracking-wider font-mono">3. OCR Text Scanner</h4>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Extract and import words instantly by scanning printed documentation with a device camera.
+                </p>
+                <div className="space-y-2 pt-2">
+                  <button 
+                    onClick={handleOcrScan}
+                    disabled={ocrStatus === 'scanning'}
+                    className="w-full py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-bold text-[10px] flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-[#F5A623]" />
+                    {ocrStatus === 'scanning' ? 'Scanning...' : 'Simulate Camera OCR'}
+                  </button>
+
+                  {scannedWord && (
+                    <div className="bg-slate-900 border border-emerald-500/20 rounded p-2 flex justify-between items-center">
+                      <div>
+                        <span className="text-[8px] uppercase text-emerald-400 font-bold font-mono">Scanned word</span>
+                        <span className="block font-bold text-slate-100 text-[10px]">{scannedWord.word}</span>
+                      </div>
+                      <button 
+                        onClick={addOcrToCollection}
+                        className="px-2.5 py-1 bg-emerald-500 text-black font-bold text-[9px] rounded hover:bg-emerald-400"
+                      >
+                        Import
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Simulator 4: Spreadsheet JSON/CSV Import */}
+            <div className="bg-slate-950/80 border border-white/5 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-slate-200">
+                  <div className="w-7 h-7 rounded-lg bg-[#F5A623]/10 flex items-center justify-center text-[#F5A623]">
+                    <FileSpreadsheet className="w-4 h-4" />
+                  </div>
+                  <h4 className="font-bold text-xs uppercase tracking-wider font-mono">4. Spreadsheet Import</h4>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  Perform bulk database load procedures by restoring files formatted in CSV/JSON templates.
+                </p>
+                <div className="space-y-2 pt-2 text-xs">
+                  <button 
+                    onClick={handleDataImport}
+                    disabled={importStatus === 'importing'}
+                    className="w-full py-2 bg-slate-900 border border-white/10 hover:border-[#F5A623]/40 text-white hover:text-[#F5A623] text-[10px] font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                    {importStatus === 'importing' ? 'Importing...' : 'Simulate CSV/JSON Import'}
+                  </button>
+                  {importStatus === 'success' && (
+                    <p className="text-[10px] text-emerald-400 text-center animate-pulse font-mono font-medium pt-1">
+                      ✓ Restored {importCount} items successfully!
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
           </div>
+
         </div>
 
       </section>
@@ -1435,7 +1622,15 @@ export default function App() {
             <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row gap-6 items-center">
               
               {/* Real App Screenshot Showcase */}
-              <div className="relative w-[250px] h-[490px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0 select-none">
+              <div 
+                onClick={() => setLightboxImg(activeScreenshot.image)}
+                className="relative w-[250px] h-[490px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0 select-none cursor-pointer group/screenshot"
+              >
+                <div className="absolute inset-0 bg-black/0 group-hover/screenshot:bg-black/30 flex items-center justify-center transition-colors z-10">
+                  <span className="text-[10px] font-mono font-bold text-[#F5A623] tracking-wider bg-black/70 px-3 py-1.5 rounded-full border border-[#F5A623]/20 opacity-0 group-hover/screenshot:opacity-100 transition-all">
+                    CLICK TO EXPAND
+                  </span>
+                </div>
                 <img 
                   src={activeScreenshot.image} 
                   alt={activeScreenshot.title} 
@@ -1780,9 +1975,9 @@ export default function App() {
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-[#F5A623] flex items-center justify-center mx-auto mb-2">
                   <Download className="w-6 h-6 animate-pulse" />
                 </div>
-                <h3 className="text-xl font-bold text-white font-display">Download SprachX Premium APK</h3>
+                <h3 className="text-xl font-bold text-white font-display">Download SprachX APK</h3>
                 <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                  Get full offline access immediately with zero ads, registration boundaries, or locks. Simply confirm your download email below.
+                  Get full access immediately to start tracking and organizing your German vocabulary today. Simply confirm your download email below.
                 </p>
               </div>
 
@@ -1813,7 +2008,7 @@ export default function App() {
                 <div className="space-y-4 text-center py-4">
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase text-slate-500 font-bold block">Security check in progress</span>
-                    <h4 className="text-sm font-semibold text-slate-200">Preparing sprachx-v1.2.4-free.apk...</h4>
+                    <h4 className="text-sm font-semibold text-slate-200">Preparing sprachx-v1.2.4.apk...</h4>
                   </div>
                   
                   {/* Progress bar */}
@@ -1835,7 +2030,7 @@ export default function App() {
                   <div className="space-y-1">
                     <h4 className="text-base font-bold text-white">APK Download Triggered!</h4>
                     <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                      Your download for <strong>sprachx-v1.2.4-free.apk</strong> has successfully initialized in your browser.
+                      Your download for <strong>sprachx-v1.2.4.apk</strong> has successfully initialized in your browser.
                     </p>
                   </div>
                   <button 
@@ -1854,11 +2049,51 @@ export default function App() {
               {/* Security info bar */}
               <div className="flex items-center gap-2 bg-white/[0.02] border border-white/5 p-3 rounded-xl text-[10px] text-slate-500">
                 <AlertCircle className="w-4 h-4 text-[#F5A623] shrink-0" />
-                <span>We guarantee 100% telemetry-free packages. No credentials or trackers are transmitted.</span>
+                <span>We guarantee telemetry-free packages. No credentials or trackers are transmitted.</span>
               </div>
 
             </motion.div>
 
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* SCREENSHOT LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {lightboxImg && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setLightboxImg(null)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+            />
+
+            {/* Modal Content */}
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative max-w-lg w-full z-10 flex flex-col items-center justify-center p-2"
+            >
+              <button 
+                onClick={() => setLightboxImg(null)}
+                className="absolute -top-12 right-2 bg-white/10 hover:bg-white/20 text-white rounded-full px-4 py-1.5 cursor-pointer text-xs font-bold uppercase tracking-wider transition-all"
+              >
+                ✕ Close
+              </button>
+              
+              <div className="relative bg-slate-900/40 p-2 border border-white/10 rounded-2xl max-h-[80vh] flex items-center justify-center overflow-hidden">
+                <img 
+                  src={lightboxImg} 
+                  alt="Expanded Screenshot Preview" 
+                  className="max-h-[75vh] w-auto object-contain rounded-xl shadow-2xl"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
