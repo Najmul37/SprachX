@@ -1,0 +1,6 @@
+{
+  "name": "SprachX Landing",
+  "description": "The premium, responsive landing website for SprachX, native immersion redefined.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --color-accent-gold: #F5A623;
+  --color-bg-dark: #0B0F17;
+  --color-card-dark: #121824;
+  --color-card-border: rgba(245, 166, 35, 0.15);
+}
+
+/* Custom scrollbar styling for high-end premium dark feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F17;
+}
+::-webkit-scrollbar-thumb {
+  background: #F5A623;
+  border-radius: 3px;
+}
+
+/* Glowing animations for premium accents */
+@keyframes accentGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(245, 166, 35, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(245, 166, 35, 0.6));
+  }
+}
+
+.animate-accent-glow {
+  animation: accentGlow 3s infinite ease-in-out;
+}
+
+/* Glass effect overrides */
+.glass-panel {
+  background: rgba(18, 24, 36, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-accent {
+  background: rgba(18, 24, 36, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 166, 35, 0.15);
+}
+
