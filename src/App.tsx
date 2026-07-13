@@ -457,32 +457,27 @@ export default function App() {
             </a>
           </div>
 
-          {/* Feature Highlights Dots */}
-          <div className="pt-4 flex flex-wrap justify-center lg:justify-start items-center gap-x-3 gap-y-2 text-xs sm:text-sm font-semibold text-slate-300 tracking-wide">
-            <span>• CEFR A1–C1</span>
-            <span>• Unlimited Vocabulary</span>
-            <span>• Smart Reviews</span>
-            <span>• Progress Tracking</span>
-          </div>
-
-          {/* Small Info Cards Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/5 max-w-2xl">
-            <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg text-center">
-              <span className="text-[10px] uppercase text-slate-500 block font-semibold mb-1">Latest Version</span>
-              <span className="text-xs font-bold text-slate-300">v1.2.4-beta</span>
-            </div>
-            <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg text-center">
-              <span className="text-[10px] uppercase text-slate-500 block font-semibold mb-1">Android Support</span>
-              <span className="text-xs font-bold text-slate-300">Android 8+</span>
-            </div>
-            <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg text-center">
-              <span className="text-[10px] uppercase text-slate-500 block font-semibold mb-1">APK Size</span>
-              <span className="text-xs font-bold text-slate-300">22.4 MB</span>
-            </div>
-            <div className="bg-white/[0.02] border border-white/5 p-3 rounded-lg text-center">
-              <span className="text-[10px] uppercase text-slate-500 block font-semibold mb-1">Developer</span>
-              <span className="text-xs font-bold text-slate-300 truncate block">Md Najmul Haque</span>
-            </div>
+          {/* Product Highlights Badges */}
+          <div className="pt-6 border-t border-white/5 flex flex-wrap justify-center lg:justify-start items-center gap-2 max-w-2xl">
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.02] border border-white/10 rounded-full text-xs font-medium text-slate-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F5A623]"></span>
+              Vocabulary Manager
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.02] border border-white/10 rounded-full text-xs font-medium text-slate-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F5A623]"></span>
+              Grammar Practice
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.02] border border-[#F5A623]/20 rounded-full text-xs font-medium text-slate-200">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F5A623] animate-pulse"></span>
+              Smart Reviews
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F5A623]/5 border border-[#F5A623]/20 rounded-full text-xs font-bold text-amber-400">
+              CEFR A1–C1
+            </span>
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.02] border border-white/10 rounded-full text-xs font-medium text-slate-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F5A623]"></span>
+              Progress Tracking
+            </span>
           </div>
 
         </div>
@@ -498,7 +493,7 @@ export default function App() {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`relative w-[310px] h-[610px] bg-[#0c101b] rounded-[44px] p-3.5 border-[6px] transition-all duration-500 overflow-hidden ${
+            className={`relative w-[310px] h-[610px] bg-[#0c101b] rounded-[44px] p-3.5 border-[6px] transition-all duration-500 ${
               isDragging ? 'border-[#F5A623] bg-[#1a1c24] ring-8 ring-[#F5A623]/10' : 'border-slate-800/90'
             }`}
             style={{
@@ -508,6 +503,14 @@ export default function App() {
             }}
           >
             
+            {/* Hardware buttons */}
+            <div className="absolute top-28 -left-[9px] w-[3px] h-10 bg-slate-800 rounded-l-md border-l border-y border-white/10" style={{ transform: 'translateZ(-5px)' }}></div>
+            <div className="absolute top-44 -left-[9px] w-[3px] h-10 bg-slate-800 rounded-l-md border-l border-y border-white/10" style={{ transform: 'translateZ(-5px)' }}></div>
+            <div className="absolute top-36 -right-[9px] w-[3px] h-12 bg-slate-800 rounded-r-md border-r border-y border-white/10" style={{ transform: 'translateZ(-5px)' }}></div>
+
+            {/* Glass reflection overlay */}
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.03] to-transparent z-25 rounded-[38px]" />
+
             {/* Notch */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-5 bg-slate-800 rounded-b-2xl z-20"></div>
 
