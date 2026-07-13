@@ -438,10 +438,10 @@ export default function App() {
           <img 
             src="assets/logo.png" 
             alt="SprachX Logo" 
-            className="w-9 h-9 rounded-lg object-contain"
+            className="h-10 w-auto object-contain block shrink-0"
             referrerPolicy="no-referrer"
           />
-          <span className="text-2xl font-bold tracking-tight font-display">
+          <span className="text-2xl font-bold tracking-tight font-display flex items-center">
             Sprach<span className="text-[#F5A623]">X</span>
           </span>
         </div>
@@ -1887,10 +1887,10 @@ export default function App() {
               <img 
                 src="assets/logo.png" 
                 alt="SprachX Logo" 
-                className="w-8 h-8 rounded-md object-contain"
+                className="h-8 w-auto object-contain block shrink-0"
                 referrerPolicy="no-referrer"
               />
-              <span className="text-xl font-bold font-display text-white">SprachX</span>
+              <span className="text-xl font-bold font-display text-white flex items-center">SprachX</span>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed font-light">
               Premium independent German vocabulary, grammar, and spacing study workspace. Redefining your native progress with secure local-device storage.

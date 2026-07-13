@@ -42,6 +42,17 @@ try {
     throw new Error('Production build failed: dist/index.html was not generated!');
   }
 
+  // Preserve logo.png in dist/assets if it exists in the root assets directory
+  const rootLogoPath = path.join(rootAssetsPath, 'logo.png');
+  const distLogoPath = path.join(distAssetsDir, 'logo.png');
+  if (fs.existsSync(rootLogoPath)) {
+    if (!fs.existsSync(distAssetsDir)) {
+      fs.mkdirSync(distAssetsDir, { recursive: true });
+    }
+    fs.copyFileSync(rootLogoPath, distLogoPath);
+    console.log('Preserved logo.png by copying it to dist/assets/logo.png');
+  }
+
   // Copy dist/index.html -> ./index.html
   const builtIndexContent = fs.readFileSync(distIndexHtml, 'utf8');
   fs.writeFileSync(indexHtmlPath, builtIndexContent, 'utf8');
@@ -52,10 +63,10 @@ try {
     if (!fs.existsSync(rootAssetsPath)) {
       fs.mkdirSync(rootAssetsPath, { recursive: true });
     } else {
-      // Clean up previous production assets from rootAssetsPath (skipping hidden items like .aistudio)
+      // Clean up previous production assets from rootAssetsPath (skipping logo.png and hidden items like .aistudio)
       const existingFiles = fs.readdirSync(rootAssetsPath);
       existingFiles.forEach(file => {
-        if (!file.startsWith('.')) {
+        if (!file.startsWith('.') && file !== 'logo.png') {
           const filePath = path.join(rootAssetsPath, file);
           if (fs.statSync(filePath).isFile()) {
             fs.unlinkSync(filePath);
