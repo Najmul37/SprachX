@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      // Workaround for sandboxed environments where window.fetch has only a getter
+      try {
+        const desc = Object.getOwnPropertyDescriptor(window, 'fetch') || 
+                     Object.getOwnPropertyDescriptor(Object.getPrototypeOf(window), 'fetch');
+        if (desc && (!desc.writable || !desc.set)) {
+          let currentFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get() { return currentFetch; },
+            set(v) { currentFetch = v; },
+            configurable: true,
+            enumerable: true
+          });
+        }
+      } catch (e) {
+        console.warn("Failed to polyfill window.fetch writeability:", e);
+      }
+    </script>
+    <script type="module" crossorigin src="/SprachX/assets/index-B9kwd3UV.js"></script>
+    <link rel="stylesheet" crossorigin href="/SprachX/assets/index-C4UAn_sS.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
