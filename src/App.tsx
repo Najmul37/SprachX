@@ -457,13 +457,10 @@ export default function App() {
 
           {/* Feature Highlights Dots */}
           <div className="pt-4 flex flex-wrap justify-center lg:justify-start items-center gap-x-3 gap-y-2 text-xs sm:text-sm font-semibold text-slate-300 tracking-wide">
-            <span>📚 Vocabulary Manager</span>
-            <span className="text-[#F5A623] font-bold">•</span>
-            <span>🇩🇪 CEFR A1–C1</span>
-            <span className="text-[#F5A623] font-bold">•</span>
-            <span>🧠 Smart Reviews</span>
-            <span className="text-[#F5A623] font-bold">•</span>
-            <span>📈 Progress Tracking</span>
+            <span>• Personal Vocabulary</span>
+            <span>• Smart Reviews</span>
+            <span>• CEFR A1–C1</span>
+            <span>• Sentence Practice</span>
           </div>
 
           {/* Small Info Cards Bar */}
@@ -1547,9 +1544,9 @@ export default function App() {
           
           <div className="grid grid-cols-2 lg:grid-cols-6 gap-8 text-center">
             
-            <div className="space-y-1.5">
-              <h4 className="text-3xl sm:text-4xl font-extrabold text-[#F5A623] font-mono">1500+</h4>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Vocabulary Words</p>
+            <div className="space-y-1.5 col-span-2 lg:col-span-1 text-center">
+              <h4 className="text-lg sm:text-xl font-black text-[#F5A623] font-display tracking-tight leading-tight">Unlimited Vocabulary</h4>
+              <p className="text-[11px] text-slate-400 font-medium leading-relaxed max-w-[160px] mx-auto">Users can create and organize unlimited vocabulary according to CEFR levels.</p>
             </div>
 
             <div className="space-y-1.5">
