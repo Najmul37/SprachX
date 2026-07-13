@@ -30,7 +30,8 @@ import {
   FolderOpen,
   Copy,
   Terminal,
-  Twitter
+  Twitter,
+  Mail
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import logo from '../assets/logo.png';
@@ -278,6 +279,17 @@ export default function App() {
     setUserVocabulary(SAMPLE_VOCAB[selectedCefr] || SAMPLE_VOCAB['B1']);
   }, [selectedCefr]);
 
+  // Handle ESC key to close modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsDownloadOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Manage Flashcard swipe and simulation
   const handleReviewScore = (quality: 'easy' | 'good' | 'hard') => {
     setIsFlipped(false);
@@ -466,13 +478,12 @@ export default function App() {
           <span className="text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-400 font-medium">
             Android supported
           </span>
-          <a 
-            href="assets/apk/SprachX-v1.0.apk"
-            download="SprachX-v1.0.apk"
+          <button 
+            onClick={() => setIsDownloadOpen(true)}
             className="px-5 py-2.5 bg-[#F5A623] hover:bg-amber-500 active:scale-95 text-black font-semibold text-sm rounded-lg shadow-lg shadow-[#F5A623]/25 hover:shadow-[#F5A623]/40 transition-all cursor-pointer inline-flex items-center justify-center text-center"
           >
             Download APK
-          </a>
+          </button>
         </div>
 
         {/* Mobile menu toggle */}
@@ -504,14 +515,15 @@ export default function App() {
             <a href="#why-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Why SprachX</a>
             <a href="#download-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Download</a>
             <a href="#faq-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">FAQ</a>
-            <a 
-              href="assets/apk/SprachX-v1.0.apk"
-              download="SprachX-v1.0.apk"
-              onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-3 bg-[#F5A623] text-black font-bold rounded-lg mt-2 shadow-lg block"
+            <button 
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsDownloadOpen(true);
+              }}
+              className="w-full text-center py-3 bg-[#F5A623] text-black font-bold rounded-lg mt-2 shadow-lg block cursor-pointer"
             >
               Download SprachX APK
-            </a>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -541,14 +553,13 @@ export default function App() {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4 pt-2">
-            <a 
-              href="assets/apk/SprachX-v1.0.apk"
-              download="SprachX-v1.0.apk"
+            <button 
+              onClick={() => setIsDownloadOpen(true)}
               className="w-full sm:w-auto px-8 py-4 bg-[#F5A623] hover:bg-amber-500 text-black font-bold text-sm rounded-xl shadow-xl shadow-[#F5A623]/20 hover:scale-[1.02] transform transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" />
               Download APK
-            </a>
+            </button>
             <a 
               href="#features-section"
               className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm rounded-xl text-center hover:scale-[1.02] transform transition-all"
@@ -1800,15 +1811,14 @@ export default function App() {
           </div>
 
           <div className="pt-4 flex flex-col justify-center items-center gap-4">
-            <a 
-              href="assets/apk/SprachX-v1.0.apk"
-              download="SprachX-v1.0.apk"
+            <button 
+              onClick={() => setIsDownloadOpen(true)}
               className="px-10 py-5 bg-[#F5A623] hover:bg-[#e09217] text-black font-extrabold rounded-xl shadow-2xl shadow-[#F5A623]/30 text-base transform hover:scale-[1.02] transition-all cursor-pointer flex items-center gap-2"
             >
               <Download className="w-5 h-5" />
               Download APK Package
-            </a>
-            <span className="text-xs text-slate-500 font-mono">Ver v1.0 | SprachX-v1.0.apk</span>
+            </button>
+            <span className="text-xs text-slate-500 font-mono">Ver v1.2.4-beta | sprachx-v1.2.4-free.apk</span>
           </div>
         </div>
 
@@ -1899,10 +1909,13 @@ export default function App() {
               <span className="text-xl font-bold font-display text-white flex items-center">SprachX</span>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed font-light">
-              Premium independent German vocabulary, grammar, and spacing study workspace. Redefining your native progress with secure local-device storage.
+              Premium independent German vocabulary, grammar, and spaced repetition workspace.
+            </p>
+            <p className="text-xs text-slate-500 font-medium">
+              Since • June 2026
             </p>
             <p className="text-xs text-slate-500">
-              © 2026 Md Najmul Haque. All rights reserved.
+              © 2026 SprachX. All rights reserved.
             </p>
           </div>
 
@@ -1922,7 +1935,7 @@ export default function App() {
             <div className="flex flex-col gap-2.5 text-slate-400 font-medium">
               <a href="#faq-section" className="hover:text-[#F5A623] transition-colors">FAQ</a>
               <a href="#download-section" className="hover:text-[#F5A623] transition-colors">Privacy Policy</a>
-              <a href="mailto:nmd757827@gmail.com" className="hover:text-[#F5A623] transition-colors flex items-center gap-1">
+              <a href="mailto:sprachx@gmail.com" className="hover:text-[#F5A623] transition-colors flex items-center gap-1">
                 Contact Developer <ExternalLink className="w-3 h-3" />
               </a>
             </div>
@@ -1983,80 +1996,47 @@ export default function App() {
                 ✕
               </button>
 
-              <div className="space-y-2 text-center">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-[#F5A623] flex items-center justify-center mx-auto mb-2">
-                  <Download className="w-6 h-6 animate-pulse" />
+              <div className="space-y-4 text-center">
+                <div className="w-12 h-12 rounded-2xl bg-[#F5A623]/10 text-[#F5A623] flex items-center justify-center mx-auto mb-2">
+                  <Sparkles className="w-6 h-6 animate-pulse" />
                 </div>
-                <h3 className="text-xl font-bold text-white font-display">Download SprachX APK</h3>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                  Get full access immediately to start tracking and organizing your German vocabulary today. Simply confirm your download email below.
-                </p>
+                <h3 className="text-2xl font-bold text-white font-display">Development in Progress</h3>
+                <div className="space-y-4 text-sm text-slate-300 max-w-sm mx-auto leading-relaxed">
+                  <p>
+                    We're continuously improving SprachX to deliver the best learning experience.
+                  </p>
+                  <p className="text-slate-400 text-xs">
+                    Contact our team to receive the latest APK and get early access to upcoming features and releases.
+                  </p>
+                </div>
               </div>
 
-              {downloadStep === 'idle' && (
-                <form onSubmit={triggerApkDownload} className="space-y-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400">Download Email Confirmation</label>
-                    <input 
-                      type="email" 
-                      required
-                      placeholder="e.g. you@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#F5A623]/40"
-                    />
-                  </div>
+              <div className="space-y-3 pt-2">
+                <a 
+                  href="https://x.com/SprachX"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 bg-[#F5A623] hover:bg-amber-500 text-black font-extrabold text-sm rounded-xl transition-all cursor-pointer shadow-lg shadow-[#F5A623]/20 flex items-center justify-center gap-2"
+                >
+                  <Twitter className="w-4 h-4" />
+                  Contact on X
+                </a>
+                
+                <a 
+                  href="mailto:sprachx@gmail.com"
+                  className="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  Email Us
+                </a>
 
-                  <button 
-                    type="submit"
-                    className="w-full py-3.5 bg-[#F5A623] hover:bg-amber-500 text-black font-bold text-sm rounded-xl transition-all cursor-pointer shadow-lg shadow-[#F5A623]/20"
-                  >
-                    Confirm & Start Secure Download
-                  </button>
-                </form>
-              )}
-
-              {downloadStep === 'preparing' && (
-                <div className="space-y-4 text-center py-4">
-                  <div className="space-y-1">
-                    <span className="text-[10px] uppercase text-slate-500 font-bold block">Security check in progress</span>
-                    <h4 className="text-sm font-semibold text-slate-200">Preparing SprachX-v1.0.apk...</h4>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden max-w-xs mx-auto">
-                    <div 
-                      className="bg-[#F5A623] h-full rounded-full transition-all duration-200" 
-                      style={{ width: `${downloadProgress}%` }}
-                    ></div>
-                  </div>
-                  <span className="text-xs font-mono text-[#F5A623]">{downloadProgress}%</span>
-                </div>
-              )}
-
-              {downloadStep === 'ready' && (
-                <div className="space-y-4 text-center py-4 animate-fade-in">
-                  <div className="w-12 h-12 bg-emerald-500/15 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
-                    <Check className="w-6 h-6" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-base font-bold text-white">APK Download Triggered!</h4>
-                    <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                      Your download for <strong>SprachX-v1.0.apk</strong> has successfully initialized in your browser.
-                    </p>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      setDownloadStep('idle');
-                      setEmail('');
-                      setIsDownloadOpen(false);
-                    }}
-                    className="px-6 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-xs font-bold uppercase tracking-wider"
-                  >
-                    Close Window
-                  </button>
-                </div>
-              )}
+                <button 
+                  onClick={() => setIsDownloadOpen(false)}
+                  className="w-full py-2 text-slate-500 hover:text-slate-300 text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
 
               {/* Security info bar */}
               <div className="flex items-center gap-2 bg-white/[0.02] border border-white/5 p-3 rounded-xl text-[10px] text-slate-500">
