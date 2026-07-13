@@ -70,37 +70,43 @@ const SCREENSHOTS_DATA = [
     id: 'dashboard',
     title: 'Home Dashboard',
     desc: 'The centralized hub for your German study session. Keep tabs on daily goals, current streaks, due review items, and live statistics at a single glance.',
-    badge: 'Centralized'
+    badge: 'Centralized',
+    image: 'assets/preview/Home.png'
   },
   {
     id: 'vocab',
     title: 'Vocabulary Manager',
     desc: 'Fully browse, filter, edit, and curate your personalized dictionary. Organize your words with custom tags and track acquisition rates.',
-    badge: 'Flexible'
+    badge: 'Flexible',
+    image: 'assets/preview/vocab-manager.png'
   },
   {
     id: 'grammar',
     title: 'Grammar Practice',
     desc: 'Bite-sized grammar workouts and structured drills to master case endings (Nominativ, Akkusativ, Dativ, Genitiv) and complex sentence structure.',
-    badge: 'Structured'
+    badge: 'Structured',
+    image: 'assets/preview/Practice.png'
   },
   {
     id: 'practice',
     title: 'Practice Hub',
     desc: 'Engage with daily personalized challenges, dynamic sentence builder sessions, and custom-made flashcard sets generated directly from your collection.',
-    badge: 'Interactive'
+    badge: 'Interactive',
+    image: 'assets/preview/revision.png'
   },
   {
     id: 'stats',
     title: 'Learning Statistics',
     desc: 'Beautifully visualized progression charts, weekly activity logs, cumulative XP meters, and breakdown of masteries by CEFR proficiency levels.',
-    badge: 'Insightful'
+    badge: 'Insightful',
+    image: 'assets/preview/Stats.png'
   },
   {
     id: 'workspace',
     title: 'Study Workspace',
     desc: 'Your creative playground. Create study folders, attach contextual notes to challenging words, and save customized lesson materials for offline study.',
-    badge: 'Productive'
+    badge: 'Productive',
+    image: 'assets/preview/study-workspace.png'
   }
 ];
 
@@ -343,9 +349,12 @@ export default function App() {
       {/* HEADER NAVBAR */}
       <nav id="navbar-main" className="sticky top-0 z-40 bg-[#0B0F17]/80 backdrop-blur-md border-b border-white/5 px-6 py-4 md:px-12 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-gradient-to-tr from-[#F5A623] to-amber-400 rounded-lg flex items-center justify-center font-bold text-black text-xl shadow-[0_0_15px_rgba(245,166,35,0.4)]">
-            X
-          </div>
+          <img 
+            src="assets/logo.png" 
+            alt="SprachX Logo" 
+            className="w-9 h-9 rounded-lg object-contain"
+            referrerPolicy="no-referrer"
+          />
           <span className="text-2xl font-bold tracking-tight font-display">
             Sprach<span className="text-[#F5A623]">X</span>
           </span>
@@ -564,160 +573,14 @@ export default function App() {
                   </div>
                 </div>
               ) : (
-                /* GORGEOUS HIGH-FIDELITY CSS HOME DASHBOARD MOCKUP */
-                <>
-                  {/* App status bar */}
-                  <div className="flex justify-between items-center mb-3 mt-1 text-[9px] text-slate-500 font-mono">
-                    <span className="font-semibold">SprachX v1.2.4</span>
-                    <span className="flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      Offline Mode
-                    </span>
-                  </div>
-
-                  {/* Inner Scrollable Dashboard */}
-                  <div className="flex-1 flex flex-col overflow-y-auto pr-0.5 space-y-3.5 scrollbar-none">
-                    
-                    {/* Welcome Header */}
-                    <div className="flex justify-between items-center bg-white/[0.02] p-2.5 rounded-xl border border-white/5">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#F5A623] to-amber-400 text-black font-bold flex items-center justify-center text-[10px]">
-                          NH
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-xs">Hallo, Najmul!</h4>
-                          <p className="text-[9px] text-slate-400">German Workspace</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-lg">
-                        <span className="text-amber-400 font-bold font-mono text-[10px]">🔥 {streakCount}d</span>
-                      </div>
-                    </div>
-
-                    {/* Level Selector */}
-                    <div>
-                      <div className="flex justify-between text-[9px] text-slate-400 uppercase mb-1 px-1 font-bold">
-                        <span>CEFR Level Selector</span>
-                        <span className="text-[#F5A623]">Switch Level</span>
-                      </div>
-                      <div className="grid grid-cols-5 gap-1">
-                        {['A1', 'A2', 'B1', 'B2', 'C1'].map((level) => (
-                          <button
-                            key={`hero-mock-level-${level}`}
-                            onClick={() => setSelectedCefr(level)}
-                            className={`py-1.5 text-center font-bold font-display rounded-md transition-all text-[9px] cursor-pointer ${
-                              selectedCefr === level
-                                ? 'bg-[#F5A623] text-black shadow-sm'
-                                : 'bg-white/5 hover:bg-white/10 text-slate-400'
-                            }`}
-                          >
-                            {level}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Daily Progress Widget */}
-                    <div className="bg-white/[0.02] border border-white/5 p-3 rounded-xl space-y-2">
-                      <div className="flex justify-between items-center text-[10px]">
-                        <span className="text-slate-400 font-semibold">Daily Goal Progression</span>
-                        <span className="font-bold text-[#F5A623]">12 / 15 Words</span>
-                      </div>
-                      <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                        <div className="bg-[#F5A623] h-full rounded-full" style={{ width: '80%' }}></div>
-                      </div>
-                      <div className="flex justify-between text-[8px] text-slate-500 font-mono">
-                        <span>Streak Booster Active</span>
-                        <span>80% Done</span>
-                      </div>
-                    </div>
-
-                    {/* Due Reviews Widget */}
-                    <div className="bg-gradient-to-r from-amber-500/10 to-transparent border border-amber-500/20 p-3 rounded-xl flex justify-between items-center">
-                      <div className="space-y-0.5">
-                        <span className="text-[8px] uppercase tracking-wider text-amber-400 block font-bold">Smart Review Due</span>
-                        <h4 className="text-sm font-bold font-mono text-white">{reviewCountToday} Vocabulary Words</h4>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-amber-500/10 flex items-center justify-center">
-                        <RefreshCw className="w-3.5 h-3.5 text-amber-400 animate-spin-slow" />
-                      </div>
-                    </div>
-
-                    {/* Modules Shortcut list */}
-                    <div className="space-y-1.5">
-                      <span className="text-[9px] uppercase tracking-wider text-slate-400 block px-1 font-bold">App Modules</span>
-                      
-                      {/* Vocab Module Shortcut */}
-                      <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <BookOpen className="w-3.5 h-3.5 text-[#F5A623]" />
-                          <div>
-                            <span className="font-bold block text-[10px]">My Vocabulary</span>
-                            <span className="text-[8px] text-slate-400">Manage 142 custom words</span>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-3 h-3 text-slate-500" />
-                      </div>
-
-                      {/* Grammar Module Shortcut */}
-                      <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <FileText className="w-3.5 h-3.5 text-amber-400" />
-                          <div>
-                            <span className="font-bold block text-[10px]">Grammar Workouts</span>
-                            <span className="text-[8px] text-slate-400">Interactive case endings</span>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-3 h-3 text-slate-500" />
-                      </div>
-
-                      {/* Practice Hub Module Shortcut */}
-                      <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Activity className="w-3.5 h-3.5 text-[#F5A623]" />
-                          <div>
-                            <span className="font-bold block text-[10px]">Daily Practice Hub</span>
-                            <span className="text-[8px] text-slate-400">Sentence builder session</span>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-3 h-3 text-slate-500" />
-                      </div>
-                    </div>
-
-                    {/* Stats Summary Panel */}
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl text-center">
-                        <span className="text-[7.5px] uppercase tracking-wider text-slate-500 block">Total Experience</span>
-                        <span className="font-bold text-xs text-white font-mono">{userXp} XP</span>
-                      </div>
-                      <div className="bg-white/[0.02] border border-white/5 p-2 rounded-xl text-center">
-                        <span className="text-[7.5px] uppercase tracking-wider text-slate-500 block">Active Folder</span>
-                        <span className="font-bold text-xs text-[#F5A623] block truncate">travel_words</span>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  {/* App Bottom Navigation Bar Mockup */}
-                  <div className="mt-2 pt-2 border-t border-white/5 flex justify-around text-slate-400">
-                    <div className="flex flex-col items-center gap-0.5 text-[#F5A623]">
-                      <Grid className="w-3.5 h-3.5" />
-                      <span className="text-[7.5px] font-bold">Home</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-0.5">
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span className="text-[7.5px]">Vocab</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-0.5">
-                      <Activity className="w-3.5 h-3.5" />
-                      <span className="text-[7.5px]">Practice</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-0.5">
-                      <Layers className="w-3.5 h-3.5" />
-                      <span className="text-[7.5px]">Library</span>
-                    </div>
-                  </div>
-
+                /* GORGEOUS REAL SCREENSHOT DISPLAY */
+                <div className="absolute inset-0 z-10 bg-[#080B11] rounded-[32px] overflow-hidden flex flex-col">
+                  <img 
+                    src="assets/preview/Home.png" 
+                    alt="SprachX Home Dashboard" 
+                    className="w-full h-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
                   {/* UPLOADER ACTION OVERLAY */}
                   <label className="absolute bottom-12 right-2 z-20 w-8 h-8 rounded-full bg-[#F5A623] text-black shadow-lg hover:bg-amber-500 flex items-center justify-center cursor-pointer transition-all hover:scale-110" title="Upload actual dashboard screenshot">
                     <Camera className="w-4 h-4" />
@@ -733,7 +596,7 @@ export default function App() {
                       }}
                     />
                   </label>
-                </>
+                </div>
               )}
 
               {/* Home Indicator */}
@@ -770,21 +633,21 @@ export default function App() {
       <section className="bg-[#0C111D] border-y border-white/5 py-12">
         <div className="w-full max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div className="space-y-2">
-            <h4 className="text-lg font-bold text-[#F5A623] font-display">Offline First Learning</h4>
+            <h4 className="text-lg font-bold text-[#F5A623] font-display">Structured CEFR Curriculum</h4>
             <p className="text-sm text-slate-400 leading-relaxed">
-              No internet connection required. Keep practicing vocabulary and reviews anywhere, whether on an airplane or the subway.
+              Absorb German naturally. Navigate high-fidelity progress paths from A1 up to C1 structured levels, built precisely for continuous vocabulary development.
             </p>
           </div>
           <div className="space-y-2">
-            <h4 className="text-lg font-bold text-[#F5A623] font-display">No Registration Required</h4>
+            <h4 className="text-lg font-bold text-[#F5A623] font-display">Flexible Data Control</h4>
             <p className="text-sm text-slate-400 leading-relaxed">
-              We value your time and privacy. Simply download the APK file and begin learning immediately without creating an account.
+              Your collection belongs entirely to you. Import existing dictionary spreadsheets and export secure backup packages anytime for full data portability.
             </p>
           </div>
           <div className="space-y-2">
-            <h4 className="text-lg font-bold text-[#F5A623] font-display">Ad-Free Workspace</h4>
+            <h4 className="text-lg font-bold text-[#F5A623] font-display">Deliberate Study Workspaces</h4>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Zero distractions. No continuous popup ads, paywalls, or daily limits on how many words you can memorize. 100% Free.
+              Learn without clutter. Organize vocabularies in custom folders, attach contextual reference notes, and review items using smart interval cards.
             </p>
           </div>
         </div>
@@ -1361,6 +1224,165 @@ export default function App() {
 
       </section>
 
+      {/* REAL APPLICATION SHOWCASE SECTION */}
+      <section id="showcases-section" className="w-full max-w-7xl mx-auto px-6 py-20 md:px-12 border-b border-white/5 space-y-32">
+        
+        {/* Showcase 1: Structured Learning Curriculum (Learn-1.png and Learn-2.png) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5 space-y-6">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">CEFR Curriculum Progression</span>
+            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
+              Structured Learning Paths
+            </h2>
+            <p className="text-base text-slate-400 leading-relaxed font-light">
+              Advance your language capability step-by-step. SprachX provides a comprehensively structured curriculum from beginner A1 all the way to advanced C1 proficiency, complete with clear lesson progressions, interactive case drills, and target goals.
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Topic-specific worksheets that teach vocabulary in context.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Gradual difficulty curves aligned with European CEFR standards.</span>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-7 flex flex-col sm:flex-row justify-center items-center gap-8 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
+            {/* Learn-1 Mockup */}
+            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
+              <img 
+                src="assets/preview/Learn-1.png" 
+                className="w-full h-full object-cover rounded-[24px]" 
+                alt="SprachX Learn Lesson Map" 
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            {/* Learn-2 Mockup */}
+            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
+              <img 
+                src="assets/preview/Learn-2.png" 
+                className="w-full h-full object-cover rounded-[24px]" 
+                alt="SprachX Lesson Exercise" 
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Showcase 2: Study Workspace (study-workspace.png) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 flex justify-center order-2 lg:order-1 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
+            {/* Study Workspace Mockup */}
+            <div className="relative w-[240px] h-[470px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
+              <img 
+                src="assets/preview/study-workspace.png" 
+                className="w-full h-full object-cover rounded-[24px]" 
+                alt="SprachX Study Workspace" 
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+          <div className="lg:col-span-5 space-y-6 order-1 lg:order-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Productive Playgrounds</span>
+            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
+              Study Workspace
+            </h2>
+            <p className="text-base text-slate-400 leading-relaxed font-light">
+              Stay organized and focused. The Study Workspace is your digital repository where you can create custom vocabulary folders, bundle words together by thematic groupings (e.g. Travel, Business, Academics), and log personalized grammar notes.
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Custom folder compilation for targeted study.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Add syntax tips, notes, and references to cards.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Showcase 3: Vocabulary Manager & Mastered Words (vocab-manager.png and Learned.png) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-5 space-y-6">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Database Curation</span>
+            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
+              Vocabulary Manager
+            </h2>
+            <p className="text-base text-slate-400 leading-relaxed font-light">
+              Maintain absolute oversight over your customized dictionary. Use the robust Vocabulary Manager to view active words, quickly add or modify entries, filter by CEFR level or category, and isolate mastered elements inside a dedicated Learned section.
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Mastery dictionary isolating completely memorized terms.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Direct search and responsive edit controls inside lists.</span>
+              </div>
+            </div>
+          </div>
+          <div className="lg:col-span-7 flex flex-col sm:flex-row justify-center items-center gap-8 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
+            {/* Vocab Manager Mockup */}
+            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
+              <img 
+                src="assets/preview/vocab-manager.png" 
+                className="w-full h-full object-cover rounded-[24px]" 
+                alt="SprachX Vocabulary Manager" 
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            {/* Learned Mockup */}
+            <div className="relative w-[220px] h-[430px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
+              <img 
+                src="assets/preview/Learned.png" 
+                className="w-full h-full object-cover rounded-[24px]" 
+                alt="SprachX Learned Section" 
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Showcase 4: Reliable Data Portability (Backup&restore.png) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 flex justify-center order-2 lg:order-1 bg-white/[0.01] border border-white/5 p-8 rounded-3xl">
+            {/* Backup & Restore Mockup */}
+            <div className="relative w-[240px] h-[470px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0">
+              <img 
+                src="assets/preview/Backup&restore.png" 
+                className="w-full h-full object-cover rounded-[24px]" 
+                alt="SprachX Backup and Restore Utility" 
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+          <div className="lg:col-span-5 space-y-6 order-1 lg:order-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#F5A623]">Data Ownership</span>
+            <h2 className="text-3xl md:text-5xl font-bold font-display text-white leading-tight">
+              Backup & Restore
+            </h2>
+            <p className="text-base text-slate-400 leading-relaxed font-light">
+              Your hard-earned study records remain secure under your direct command. SprachX includes an integrated local backup and restoration utility that allows you to easily export your databases to standard CSV or JSON files or import backup collections seamlessly.
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Instant import of vocabulary collections in open structures.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-[#F5A623] shrink-0 mt-0.5" />
+                <span className="text-slate-300 text-sm font-medium">Full database backup exports to easily switch devices.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
       {/* SCREENSHOTS SECTION */}
       <section id="screenshots-section" className="w-full max-w-7xl mx-auto px-6 py-20 md:px-12 border-b border-white/5 bg-gradient-to-b from-[#0B0F17] to-[#0A0D14]">
         
@@ -1412,105 +1434,14 @@ export default function App() {
             
             <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-4 md:p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row gap-6 items-center">
               
-              {/* Virtualized App Screen Placeholder */}
-              <div className="w-[250px] h-[450px] bg-[#070A10] rounded-[24px] border-[4px] border-slate-800 p-4 shadow-xl flex flex-col justify-between shrink-0 select-none">
-                <div className="flex justify-between items-center text-[8px] text-slate-500 uppercase">
-                  <span>SprachX Mock View</span>
-                  <span>{activeScreenshot.badge}</span>
-                </div>
-
-                {/* Simulated Screens Content depending on active index */}
-                <div className="flex-1 my-4 flex flex-col justify-center text-center space-y-4">
-                  
-                  {/* Visual screen illustration inside placeholder */}
-                  {currentScreenIdx === 0 && (
-                    <div className="space-y-3">
-                      <div className="w-10 h-10 rounded-full bg-[#F5A623]/20 flex items-center justify-center mx-auto text-[#F5A623]">
-                        <Layers className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-bold text-xs text-white">Home Dashboard</h4>
-                      <p className="text-[9px] text-slate-400 max-w-[150px] mx-auto">12 Daily words completed. Active level set to B1.</p>
-                      <div className="bg-white/5 p-2 rounded-lg text-[9px] text-left">
-                        <p className="font-bold text-[#F5A623]">🔥 Streak: 14 Days</p>
-                        <p className="text-slate-400 mt-0.5">Keep up the rhythm!</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentScreenIdx === 1 && (
-                    <div className="space-y-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto text-blue-400">
-                        <BookOpen className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-bold text-xs text-white">Vocabulary Manager</h4>
-                      <p className="text-[9px] text-slate-400 max-w-[150px] mx-auto">Search, edit and filter vocabulary cards instantly.</p>
-                      <div className="space-y-1 text-left">
-                        <div className="bg-white/5 p-1 rounded text-[8px] font-mono text-slate-300">die Entscheidung</div>
-                        <div className="bg-white/5 p-1 rounded text-[8px] font-mono text-slate-300">der Erfolg</div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentScreenIdx === 2 && (
-                    <div className="space-y-3">
-                      <div className="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center mx-auto text-pink-400">
-                        <FileText className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-bold text-xs text-white">Grammar Practice</h4>
-                      <p className="text-[9px] text-slate-400 max-w-[150px] mx-auto">Structured worksheets detailing cases and complex word order.</p>
-                      <div className="bg-white/5 p-2 rounded-lg text-left text-[8px]">
-                        <p className="font-bold text-slate-300">Adjective Endings</p>
-                        <p className="text-slate-400 mt-0.5">Practice exercises for Akkusativ.</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentScreenIdx === 3 && (
-                    <div className="space-y-3">
-                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto text-emerald-400">
-                        <Activity className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-bold text-xs text-white">Practice Hub</h4>
-                      <p className="text-[9px] text-slate-400 max-w-[150px] mx-auto">Daily revisional exercises customized specifically to you.</p>
-                      <div className="bg-white/5 p-1.5 rounded-lg text-[8px] font-bold text-emerald-400">
-                        ✓ Sentence Drills Complete
-                      </div>
-                    </div>
-                  )}
-
-                  {currentScreenIdx === 4 && (
-                    <div className="space-y-3">
-                      <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto text-purple-400">
-                        <SmartphoneNfc className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-bold text-xs text-white">Learning Statistics</h4>
-                      <p className="text-[9px] text-slate-400 max-w-[150px] mx-auto">Progress logs, weekly study minutes charts, and XP logs.</p>
-                      <div className="h-10 flex items-end justify-center gap-1.5 bg-white/5 p-1 rounded-lg">
-                        <div className="w-3 bg-[#F5A623] h-[40%] rounded-t-sm"></div>
-                        <div className="w-3 bg-[#F5A623] h-[75%] rounded-t-sm"></div>
-                        <div className="w-3 bg-[#F5A623] h-[55%] rounded-t-sm"></div>
-                        <div className="w-3 bg-[#F5A623] h-[90%] rounded-t-sm"></div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentScreenIdx === 5 && (
-                    <div className="space-y-3">
-                      <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto text-amber-400">
-                        <Layers className="w-5 h-5" />
-                      </div>
-                      <h4 className="font-bold text-xs text-white">Study Workspace</h4>
-                      <p className="text-[9px] text-slate-400 max-w-[150px] mx-auto">Creative notes folders, customized word groups, and cards.</p>
-                      <div className="bg-white/5 p-2 rounded-lg text-[8px] text-left">
-                        <p className="font-bold text-amber-400">Folder: Vacation Vocabulary</p>
-                        <p className="text-slate-500">14 Saved cards</p>
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-
-                <div className="w-16 h-1 bg-slate-800 rounded-full mx-auto"></div>
+              {/* Real App Screenshot Showcase */}
+              <div className="relative w-[250px] h-[490px] bg-[#0c101b] rounded-[32px] p-2 border-[4px] border-slate-800 shadow-2xl overflow-hidden shrink-0 select-none">
+                <img 
+                  src={activeScreenshot.image} 
+                  alt={activeScreenshot.title} 
+                  className="w-full h-full object-cover rounded-[24px]"
+                  referrerPolicy="no-referrer"
+                />
               </div>
 
               {/* Text explanations */}
@@ -1565,8 +1496,8 @@ export default function App() {
             </div>
 
             <div className="space-y-1.5">
-              <h4 className="text-3xl sm:text-4xl font-extrabold text-white font-mono">100%</h4>
-              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Offline Learning</p>
+              <h4 className="text-3xl sm:text-4xl font-extrabold text-white font-mono">Secure</h4>
+              <p className="text-xs uppercase tracking-wider text-slate-400 font-bold">Local Databases</p>
             </div>
 
             <div className="space-y-1.5">
@@ -1598,7 +1529,7 @@ export default function App() {
           <div className="relative bg-[#0E1321] border border-[#F5A623]/20 p-8 rounded-2xl space-y-4">
             <span className="text-5xl font-serif text-[#F5A623] font-bold">“</span>
             <p className="text-lg text-slate-300 font-medium italic leading-relaxed">
-              "As a language learner myself, I realized that modern language applications suffer from extreme bloat. They are cluttered with microtransactions, heavy notifications, and useless games. SprachX is my answer to that—a completely private, powerful, offline-first workspace designed purely to help you absorb vocabulary and grammar structures seamlessly."
+              "As a language learner myself, I realized that modern language applications suffer from extreme bloat. They are cluttered with microtransactions, heavy notifications, and useless games. SprachX is my answer to that—a completely private, powerful, and local-first workspace designed purely to help you absorb vocabulary and grammar structures seamlessly."
             </p>
             <div>
               <h4 className="font-bold text-white text-base">Md Najmul Haque</h4>
@@ -1650,7 +1581,7 @@ export default function App() {
             Get the full SprachX experience on Android.
           </h2>
           <p className="text-base text-slate-300 max-w-xl mx-auto font-light">
-            Enjoy full privacy, zero ad distractions, and local workspace storage. Download the secure APK package file directly and install on any device running Android 8+.
+            Enjoy full privacy, robust data portability, and structured local workspace storage. Download the secure APK package file directly and install on any device running Android 8+.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-sm font-semibold text-slate-300 max-w-lg mx-auto">
@@ -1660,11 +1591,11 @@ export default function App() {
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle className="w-4 h-4 text-[#F5A623]" />
-              <span>Offline capabilities</span>
+              <span>Local Database Security</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle className="w-4 h-4 text-[#F5A623]" />
-              <span>100% Free & No Ads</span>
+              <span>Complete Data Ownership</span>
             </div>
           </div>
 
@@ -1674,7 +1605,7 @@ export default function App() {
               className="px-10 py-5 bg-[#F5A623] hover:bg-[#e09217] text-black font-extrabold rounded-xl shadow-2xl shadow-[#F5A623]/30 text-base transform hover:scale-[1.02] transition-all cursor-pointer flex items-center gap-2"
             >
               <Download className="w-5 h-5" />
-              Download Free APK Package
+              Download APK Package
             </button>
             <span className="text-xs text-slate-500 font-mono">Ver v1.2.4-beta | sprachx-v1.2.4-free.apk</span>
           </div>
@@ -1694,24 +1625,24 @@ export default function App() {
           
           {[
             {
-              q: "Is SprachX really 100% free and without advertising?",
-              a: "Yes, completely. SprachX is created as an independent, distraction-free study tool for learners who want high-fidelity German vocabulary and grammar drills without persistent pop-up advertisements, video ads, or locks on levels."
+              q: "What is the core focus of the SprachX study tool?",
+              a: "SprachX is designed as a focused, premium workspace for learners who want high-fidelity German vocabulary acquisition, customized folder structure, and spaced repetition card review cycles to accelerate retention."
             },
             {
-              q: "How does the Offline First structure work?",
-              a: "All of your personalized vocabulary lists, custom folders, structural notes, review indexes, and learning statistics are stored locally on your Android device using a secure local database. You never need an internet connection to practice or review your dictionary."
+              q: "How is my vocabulary data structured and stored?",
+              a: "All of your personalized vocabulary lists, custom folders, structural notes, review indexes, and learning statistics are stored securely on your local device. This local-first architecture keeps your studies fast, private, and always responsive."
             },
             {
-              q: "Can I import vocabulary lists from external files?",
-              a: "Absolutely. SprachX is designed with full data portability in mind. You can import vocabulary from customized JSON files or standard CSV formats. You can also export your whole database at any point for cloud storage backups."
+              q: "Can I import and export my vocabulary database?",
+              a: "Absolutely. SprachX provides full data control with seamless import from custom CSV and JSON list files, as well as easy backup export. You maintain complete ownership of your learning lists."
             },
             {
-              q: "What Android version does SprachX require?",
-              a: "The application runs smoothly on any Android smartphone running Android 8 (Oreo) or above. The download package is optimized to weigh only 22.4 MB for convenient installation."
+              q: "What Android version does the application require?",
+              a: "The application is fully compatible with smartphones running Android 8 (Oreo) or above, offering a lightweight and highly optimized experience with native device integration."
             },
             {
-              q: "Does SprachX require personal user registration?",
-              a: "No. SprachX does not request email addresses, passwords, phone numbers, or social logins. Simply install the APK file and begin your study session instantly."
+              q: "How does the spaced repetition review system work?",
+              a: "SprachX tracks your review intervals and targets specific words right before your memory retention begins to fade. It ensures you focus only on the elements that need reinforcement."
             }
           ].map((faq, idx) => {
             const isOpen = faqOpen === idx;
@@ -1758,13 +1689,16 @@ export default function App() {
           {/* Logo & description */}
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-[#F5A623] text-black font-extrabold flex items-center justify-center text-lg rounded-md">
-                X
-              </div>
+              <img 
+                src="assets/logo.png" 
+                alt="SprachX Logo" 
+                className="w-8 h-8 rounded-md object-contain"
+                referrerPolicy="no-referrer"
+              />
               <span className="text-xl font-bold font-display text-white">SprachX</span>
             </div>
             <p className="text-xs text-slate-500 leading-relaxed font-light">
-              Premium independent German vocabulary, grammar, and spacing study workspace. Redefining your native progress 100% offline.
+              Premium independent German vocabulary, grammar, and spacing study workspace. Redefining your native progress with secure local-device storage.
             </p>
             <p className="text-xs text-slate-500">
               © 2026 Md Najmul Haque. All rights reserved.
