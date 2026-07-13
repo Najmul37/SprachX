@@ -427,7 +427,7 @@ export default function App() {
   const activeScreenshot = SCREENSHOTS_DATA[currentScreenIdx];
 
   return (
-    <div className="min-h-screen bg-[#0B0F17] text-white flex flex-col font-sans selection:bg-[#F5A623] selection:text-black">
+    <div className="min-h-screen bg-[#0B0F17] text-white flex flex-col font-sans selection:bg-[#F5A623] selection:text-black overflow-x-hidden relative w-full">
       
       {/* BACKGROUND GRAPHICS */}
       <div className="absolute top-0 inset-x-0 h-[800px] bg-gradient-to-b from-[#F5A623]/10 via-[#0B0F17]/0 to-[#0B0F17]/0 pointer-events-none" />
@@ -593,7 +593,7 @@ export default function App() {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`relative w-[310px] h-[610px] bg-[#0c101b] rounded-[44px] p-3.5 border-[6px] transition-all duration-500 ${
+            className={`relative w-[280px] sm:w-[310px] h-[550px] sm:h-[610px] bg-[#0c101b] rounded-[44px] p-3.5 border-[6px] transition-all duration-500 ${
               isDragging ? 'border-[#F5A623] bg-[#1a1c24] ring-8 ring-[#F5A623]/10' : 'border-slate-800/90'
             }`}
             style={{
@@ -1910,7 +1910,7 @@ export default function App() {
             <h5 className="font-bold text-white uppercase tracking-wider">Product</h5>
             <div className="flex flex-col gap-2.5 text-slate-400 font-medium">
               <a href="#features-section" className="hover:text-[#F5A623] transition-colors">Features</a>
-              <a href="#screenshots-section" className="hover:text-[#F5A623] transition-colors">Screenshots</a>
+              <a href="#screenshots-section" className="hover:text-[#F5A623] transition-colors">Preview</a>
               <a href="#download-section" className="hover:text-[#F5A623] transition-colors">Download</a>
             </div>
           </div>

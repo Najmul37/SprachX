@@ -10,8 +10,10 @@
   --color-card-border: rgba(245, 166, 35, 0.15);
 }
 
-html {
+html, body {
   scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Custom scrollbar styling for high-end premium dark feel */
