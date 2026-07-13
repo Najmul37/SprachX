@@ -434,7 +434,10 @@ export default function App() {
 
       {/* HEADER NAVBAR */}
       <nav id="navbar-main" className="sticky top-0 z-40 bg-[#0B0F17]/80 backdrop-blur-md border-b border-white/5 px-6 py-4 md:px-12 flex justify-between items-center">
-        <div className="flex items-center gap-3">
+        <div 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center gap-3 cursor-pointer select-none"
+        >
           <img 
             src="assets/logo.png" 
             alt="SprachX Logo" 
@@ -448,7 +451,7 @@ export default function App() {
 
         {/* Desktop nav links */}
         <div className="hidden lg:flex items-center gap-8 text-sm text-slate-300 font-medium">
-          <a href="#navbar-main" className="hover:text-[#F5A623] transition-colors">Home</a>
+          <a href="#hero-section" className="hover:text-[#F5A623] transition-colors">Home</a>
           <a href="#features-section" className="hover:text-[#F5A623] transition-colors">Features</a>
           <a href="#screenshots-section" className="hover:text-[#F5A623] transition-colors">Preview</a>
           <a href="#statistics-section" className="hover:text-[#F5A623] transition-colors">Statistics</a>
@@ -492,7 +495,7 @@ export default function App() {
             exit={{ opacity: 0, y: -10 }}
             className="lg:hidden fixed top-[69px] inset-x-0 bg-[#0E131F]/95 backdrop-blur-lg border-b border-white/10 z-30 p-6 flex flex-col gap-4 shadow-xl"
           >
-            <a href="#navbar-main" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Home</a>
+            <a href="#hero-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Home</a>
             <a href="#features-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Features</a>
             <a href="#screenshots-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Preview</a>
             <a href="#statistics-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Statistics</a>
@@ -513,7 +516,7 @@ export default function App() {
       </AnimatePresence>
 
       {/* HERO SECTION */}
-      <header className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-24 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <header id="hero-section" className="relative w-full max-w-7xl mx-auto px-6 pt-16 pb-24 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         {/* Left column info */}
         <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
