@@ -373,11 +373,10 @@ export default function App() {
           clearInterval(interval);
           setDownloadStep('ready');
           
-          // Trigger file download simulation
+          // Trigger actual file download
           const element = document.createElement("a");
-          const file = new Blob(["Mock SprachX Premium APK File"], {type: 'text/plain'});
-          element.href = URL.createObjectURL(file);
-          element.download = "sprachx-v1.2.4-free.apk";
+          element.href = "assets/apk/SprachX-v1.0.apk";
+          element.download = "SprachX-v1.0.apk";
           document.body.appendChild(element);
           element.click();
           document.body.removeChild(element);
@@ -467,12 +466,13 @@ export default function App() {
           <span className="text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-400 font-medium">
             Android supported
           </span>
-          <button 
-            onClick={() => setIsDownloadOpen(true)}
-            className="px-5 py-2.5 bg-[#F5A623] hover:bg-amber-500 active:scale-95 text-black font-semibold text-sm rounded-lg shadow-lg shadow-[#F5A623]/25 hover:shadow-[#F5A623]/40 transition-all cursor-pointer"
+          <a 
+            href="assets/apk/SprachX-v1.0.apk"
+            download="SprachX-v1.0.apk"
+            className="px-5 py-2.5 bg-[#F5A623] hover:bg-amber-500 active:scale-95 text-black font-semibold text-sm rounded-lg shadow-lg shadow-[#F5A623]/25 hover:shadow-[#F5A623]/40 transition-all cursor-pointer inline-flex items-center justify-center text-center"
           >
             Download APK
-          </button>
+          </a>
         </div>
 
         {/* Mobile menu toggle */}
@@ -504,15 +504,14 @@ export default function App() {
             <a href="#why-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Why SprachX</a>
             <a href="#download-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Download</a>
             <a href="#faq-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">FAQ</a>
-            <button 
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setIsDownloadOpen(true);
-              }}
-              className="w-full text-center py-3 bg-[#F5A623] text-black font-bold rounded-lg mt-2 shadow-lg"
+            <a 
+              href="assets/apk/SprachX-v1.0.apk"
+              download="SprachX-v1.0.apk"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full text-center py-3 bg-[#F5A623] text-black font-bold rounded-lg mt-2 shadow-lg block"
             >
               Download SprachX APK
-            </button>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -542,13 +541,14 @@ export default function App() {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4 pt-2">
-            <button 
-              onClick={() => setIsDownloadOpen(true)}
+            <a 
+              href="assets/apk/SprachX-v1.0.apk"
+              download="SprachX-v1.0.apk"
               className="w-full sm:w-auto px-8 py-4 bg-[#F5A623] hover:bg-amber-500 text-black font-bold text-sm rounded-xl shadow-xl shadow-[#F5A623]/20 hover:scale-[1.02] transform transition-all cursor-pointer flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" />
               Download APK
-            </button>
+            </a>
             <a 
               href="#features-section"
               className="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm rounded-xl text-center hover:scale-[1.02] transform transition-all"
@@ -1800,14 +1800,15 @@ export default function App() {
           </div>
 
           <div className="pt-4 flex flex-col justify-center items-center gap-4">
-            <button 
-              onClick={() => setIsDownloadOpen(true)}
+            <a 
+              href="assets/apk/SprachX-v1.0.apk"
+              download="SprachX-v1.0.apk"
               className="px-10 py-5 bg-[#F5A623] hover:bg-[#e09217] text-black font-extrabold rounded-xl shadow-2xl shadow-[#F5A623]/30 text-base transform hover:scale-[1.02] transition-all cursor-pointer flex items-center gap-2"
             >
               <Download className="w-5 h-5" />
               Download APK Package
-            </button>
-            <span className="text-xs text-slate-500 font-mono">Ver v1.2.4-beta | sprachx-v1.2.4-free.apk</span>
+            </a>
+            <span className="text-xs text-slate-500 font-mono">Ver v1.0 | SprachX-v1.0.apk</span>
           </div>
         </div>
 
@@ -2019,7 +2020,7 @@ export default function App() {
                 <div className="space-y-4 text-center py-4">
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase text-slate-500 font-bold block">Security check in progress</span>
-                    <h4 className="text-sm font-semibold text-slate-200">Preparing sprachx-v1.2.4.apk...</h4>
+                    <h4 className="text-sm font-semibold text-slate-200">Preparing SprachX-v1.0.apk...</h4>
                   </div>
                   
                   {/* Progress bar */}
@@ -2041,7 +2042,7 @@ export default function App() {
                   <div className="space-y-1">
                     <h4 className="text-base font-bold text-white">APK Download Triggered!</h4>
                     <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                      Your download for <strong>sprachx-v1.2.4.apk</strong> has successfully initialized in your browser.
+                      Your download for <strong>SprachX-v1.0.apk</strong> has successfully initialized in your browser.
                     </p>
                   </div>
                   <button 
