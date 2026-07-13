@@ -53,6 +53,14 @@ try {
     console.log('Preserved logo.png by copying it to dist/assets/logo.png');
   }
 
+  // Also preserve logo.png in the root and copy it to dist/logo.png
+  const rootLogoAtRoot = path.resolve('logo.png');
+  const distLogoAtRoot = path.join(distPath, 'logo.png');
+  if (fs.existsSync(rootLogoAtRoot)) {
+    fs.copyFileSync(rootLogoAtRoot, distLogoAtRoot);
+    console.log('Copied logo.png to dist/logo.png');
+  }
+
   // Copy dist/index.html -> ./index.html
   const builtIndexContent = fs.readFileSync(distIndexHtml, 'utf8');
   fs.writeFileSync(indexHtmlPath, builtIndexContent, 'utf8');

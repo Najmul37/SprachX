@@ -29,7 +29,8 @@ import {
   Filter,
   FolderOpen,
   Copy,
-  Terminal
+  Terminal,
+  Twitter
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -439,7 +440,7 @@ export default function App() {
           className="flex items-center gap-3 cursor-pointer select-none"
         >
           <img 
-            src="assets/logo.png" 
+            src="logo.png" 
             alt="SprachX Logo" 
             className="h-10 w-auto object-contain block shrink-0"
             referrerPolicy="no-referrer"
@@ -1888,7 +1889,7 @@ export default function App() {
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
               <img 
-                src="assets/logo.png" 
+                src="logo.png" 
                 alt="SprachX Logo" 
                 className="h-8 w-auto object-contain block shrink-0"
                 referrerPolicy="no-referrer"
@@ -1929,9 +1930,15 @@ export default function App() {
           <div className="space-y-4 text-xs">
             <h5 className="font-bold text-white uppercase tracking-wider">Connect</h5>
             <div className="flex flex-col gap-2.5 text-slate-400 font-medium">
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5A623] transition-colors">GitHub</a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5A623] transition-colors">Facebook</a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#F5A623] transition-colors">Instagram</a>
+              <a 
+                href="https://x.com/SprachX" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="hover:text-[#F5A623] transition-colors flex items-center gap-1.5"
+              >
+                <Twitter className="w-3.5 h-3.5" />
+                <span>X (Twitter)</span>
+              </a>
             </div>
           </div>
 
