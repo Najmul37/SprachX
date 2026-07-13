@@ -33,6 +33,7 @@ import {
   Twitter
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import logo from '../assets/logo.png';
 
 // Interfaces for our interactive widgets
 interface VocabItem {
@@ -440,7 +441,7 @@ export default function App() {
           className="flex items-center gap-3 cursor-pointer select-none"
         >
           <img 
-            src="assets/logo.png" 
+            src={logo} 
             alt="SprachX Logo" 
             className="h-10 w-auto object-contain block shrink-0"
             referrerPolicy="no-referrer"
@@ -1889,7 +1890,7 @@ export default function App() {
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
               <img 
-                src="assets/logo.png" 
+                src={logo} 
                 alt="SprachX Logo" 
                 className="h-8 w-auto object-contain block shrink-0"
                 referrerPolicy="no-referrer"
