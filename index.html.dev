@@ -22,11 +22,10 @@
         console.warn("Failed to polyfill window.fetch writeability:", e);
       }
     </script>
-    <script type="module" crossorigin src="/SprachX/assets/index-CNoOFsHx.js"></script>
-    <link rel="stylesheet" crossorigin href="/SprachX/assets/index-B3nUZFlq.css">
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
 
