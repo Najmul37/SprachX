@@ -440,7 +440,7 @@ export default function App() {
           className="flex items-center gap-3 cursor-pointer select-none"
         >
           <img 
-            src="logo.png" 
+            src="assets/logo.png" 
             alt="SprachX Logo" 
             className="h-10 w-auto object-contain block shrink-0"
             referrerPolicy="no-referrer"
@@ -1889,7 +1889,7 @@ export default function App() {
           <div className="space-y-4">
             <div className="flex items-center gap-2.5">
               <img 
-                src="logo.png" 
+                src="assets/logo.png" 
                 alt="SprachX Logo" 
                 className="h-8 w-auto object-contain block shrink-0"
                 referrerPolicy="no-referrer"
