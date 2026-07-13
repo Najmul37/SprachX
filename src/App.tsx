@@ -463,7 +463,7 @@ export default function App() {
         {/* Action Button */}
         <div className="hidden lg:flex items-center gap-4">
           <span className="text-xs bg-white/5 border border-white/10 px-3 py-1 rounded-full text-slate-400 font-medium">
-            Android 8+ supported
+            Android supported
           </span>
           <button 
             onClick={() => setIsDownloadOpen(true)}
@@ -1785,7 +1785,7 @@ export default function App() {
           <div className="flex flex-col sm:flex-row justify-center items-center gap-6 text-sm font-semibold text-slate-300 max-w-lg mx-auto">
             <div className="flex items-center gap-1.5">
               <CheckCircle className="w-4 h-4 text-[#F5A623]" />
-              <span>Android 8+ support</span>
+              <span>Android support</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle className="w-4 h-4 text-[#F5A623]" />
