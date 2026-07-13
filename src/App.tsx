@@ -353,8 +353,9 @@ export default function App() {
 
         {/* Desktop nav links */}
         <div className="hidden lg:flex items-center gap-8 text-sm text-slate-300 font-medium">
+          <a href="#navbar-main" className="hover:text-[#F5A623] transition-colors">Home</a>
           <a href="#features-section" className="hover:text-[#F5A623] transition-colors">Features</a>
-          <a href="#screenshots-section" className="hover:text-[#F5A623] transition-colors">Screenshots</a>
+          <a href="#screenshots-section" className="hover:text-[#F5A623] transition-colors">Preview</a>
           <a href="#statistics-section" className="hover:text-[#F5A623] transition-colors">Statistics</a>
           <a href="#why-section" className="hover:text-[#F5A623] transition-colors">Why SprachX</a>
           <a href="#download-section" className="hover:text-[#F5A623] transition-colors">Download</a>
@@ -396,8 +397,9 @@ export default function App() {
             exit={{ opacity: 0, y: -10 }}
             className="lg:hidden fixed top-[69px] inset-x-0 bg-[#0E131F]/95 backdrop-blur-lg border-b border-white/10 z-30 p-6 flex flex-col gap-4 shadow-xl"
           >
+            <a href="#navbar-main" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Home</a>
             <a href="#features-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Features</a>
-            <a href="#screenshots-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Screenshots</a>
+            <a href="#screenshots-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Preview</a>
             <a href="#statistics-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Statistics</a>
             <a href="#why-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Why SprachX</a>
             <a href="#download-section" onClick={() => setMobileMenuOpen(false)} className="py-2 text-slate-200 font-medium hover:text-[#F5A623]">Download</a>
@@ -457,10 +459,10 @@ export default function App() {
 
           {/* Feature Highlights Dots */}
           <div className="pt-4 flex flex-wrap justify-center lg:justify-start items-center gap-x-3 gap-y-2 text-xs sm:text-sm font-semibold text-slate-300 tracking-wide">
-            <span>• Personal Vocabulary</span>
-            <span>• Smart Reviews</span>
             <span>• CEFR A1–C1</span>
-            <span>• Sentence Practice</span>
+            <span>• Unlimited Vocabulary</span>
+            <span>• Smart Reviews</span>
+            <span>• Progress Tracking</span>
           </div>
 
           {/* Small Info Cards Bar */}
@@ -486,7 +488,7 @@ export default function App() {
         </div>
 
         {/* Right column: Interactive App Dashboard Phone Mockup */}
-        <div className="lg:col-span-5 relative flex justify-center">
+        <div className="lg:col-span-5 relative flex justify-center" style={{ perspective: '1500px' }}>
           
           {/* Light Ambient backdrop aura */}
           <div className="absolute inset-0 bg-[#F5A623]/5 rounded-full blur-3xl pointer-events-none transform translate-y-12"></div>
@@ -496,9 +498,14 @@ export default function App() {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`relative w-[310px] h-[610px] bg-[#0c101b] rounded-[44px] p-3.5 shadow-2xl border-[6px] hover:scale-[1.01] transition-all duration-300 overflow-hidden ${
+            className={`relative w-[310px] h-[610px] bg-[#0c101b] rounded-[44px] p-3.5 border-[6px] transition-all duration-500 overflow-hidden ${
               isDragging ? 'border-[#F5A623] bg-[#1a1c24] ring-8 ring-[#F5A623]/10' : 'border-slate-800/90'
             }`}
+            style={{
+              transform: isDragging ? 'none' : 'rotateX(10deg) rotateY(-16deg) rotateZ(3deg)',
+              transformStyle: 'preserve-3d',
+              boxShadow: '-32px 32px 64px rgba(0, 0, 0, 0.85), -12px 12px 24px rgba(245, 166, 35, 0.04)',
+            }}
           >
             
             {/* Notch */}
